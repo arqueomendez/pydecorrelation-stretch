@@ -1,12 +1,11 @@
 import numpy as np
-import pytest
-import cv2
+
 from dstretch.independent_processors import (
-    InvertProcessor,
     AutoContrastProcessor,
     ColorBalanceProcessor,
     FlattenProcessor,
     HueShiftProcessor,
+    InvertProcessor,
 )
 
 
@@ -24,11 +23,11 @@ class TestIndependentProcessors:
         """Test InvertProcessor."""
         processor = InvertProcessor()
         result = processor.process(self.image)
-        
+
         assert result.processor_type == "Invert"
         assert result.image.shape == self.image.shape
         assert result.image.dtype == np.uint8
-        
+
         # Check actual inversion
         expected = 255 - self.image
         np.testing.assert_array_equal(result.image, expected)
@@ -39,10 +38,10 @@ class TestIndependentProcessors:
         # Create a low contrast image
         low_contrast = (self.image // 4) + 100
         result = processor.process(low_contrast, clip_percent=0.0)
-        
+
         assert result.processor_type == "Auto Contrast"
         assert result.image.shape == low_contrast.shape
-        
+
         # Check that range is expanded (histogram stretching)
         for i in range(3):
             assert np.min(result.image[:, :, i]) < np.min(low_contrast[:, :, i])
@@ -54,9 +53,9 @@ class TestIndependentProcessors:
         # Create an image with a color cast (e.g., strong red)
         cast_image = self.image.copy()
         cast_image[:, :, 0] = np.clip(cast_image[:, :, 0].astype(int) + 50, 0, 255)
-        
+
         result = processor.process(cast_image, strength=1.0)
-        
+
         assert result.processor_type == "Color Balance"
         assert "original_color_cast" in result.statistics
         # assert "dominant_cast" in result.statistics
@@ -64,11 +63,11 @@ class TestIndependentProcessors:
     def test_flatten_processor(self):
         """Test FlattenProcessor."""
         processor = FlattenProcessor()
-        
-        # Flatten is hard to verify exactly without reimplementing, 
+
+        # Flatten is hard to verify exactly without reimplementing,
         # but we can check output properties
         result = processor.process(self.image, ksize_factor=20.0)
-        
+
         assert result.processor_type == "Flatten"
         assert result.image.shape == self.image.shape
         # Flatten often reduces variance in illumination
@@ -78,14 +77,14 @@ class TestIndependentProcessors:
         """Test HueShiftProcessor."""
         processor = HueShiftProcessor()
         result = processor.process(self.image, shift=90)
-        
+
         assert result.processor_type == "Hue Shift"
-        
+
         # For a shift of 90 degrees (in OpenCV HSV 0-180 scale, 90 degrees is 45 units)
         # Actually implementation might use degrees directly. Let's check logic.
         # Implementation: ((h + shift) % 180).
         # Shift in pipeline is usually passed as 'shift' param.
-        
+
         # Just convert input to HSV, shift H, convert back and compare?
         # That's what the processor does. Let's ensure output is different.
         assert not np.array_equal(result.image, self.image)

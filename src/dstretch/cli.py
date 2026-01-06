@@ -454,7 +454,10 @@ Examples:
             )
 
             result = pipeline.process_complete(
-                image, _convert_config_to_list(preprocessing_steps), args.colorspace, args.scale
+                image,
+                _convert_config_to_list(preprocessing_steps),
+                args.colorspace,
+                args.scale,
             )
 
         # Save final result

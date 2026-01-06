@@ -1089,7 +1089,7 @@ wheels = [
 
 [[package]]
 name = "dstretch-python"
-version = "0.2.0"
+version = "0.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "commitizen", version = "3.31.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },

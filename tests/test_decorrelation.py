@@ -11,9 +11,9 @@ Asistido por: Claude Sonnet 4, Gemini 2.5 Pro, Copilot con GPT-4.1
 
 from pathlib import Path
 
+import cv2
 import numpy as np
 import pytest
-import cv2
 
 from dstretch import ColorspaceManager, DecorrelationStretch
 from dstretch.decorrelation import process_image
@@ -176,14 +176,15 @@ class TestUtilityFunctions:
 
 # Integration test with actual image
 @pytest.mark.skipif(
-    not Path("test_images/paintings.jpg").exists(), reason="Test image not found in test_images/"
+    not Path("test_images/paintings.jpg").exists(),
+    reason="Test image not found in test_images/",
 )
 def test_real_image_processing():
     """Integration test with a real image file."""
     image_path = "test_images/paintings.jpg"
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
+
     dstretch = DecorrelationStretch()
     result = dstretch.process(image, colorspace="YDS", scale=15.0)
 

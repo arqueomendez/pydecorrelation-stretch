@@ -25,6 +25,8 @@ from .independent_processors import (
     ColorBalanceProcessor,
     FlattenProcessor,
     InvertProcessor,
+)
+from .independent_processors import (
     ProcessingResult as ProcessorResult,
 )
 
@@ -166,23 +168,17 @@ class DStretchPipeline:
                 results.append(result)
 
             elif processor_type == "auto_contrast":
-                result = self.auto_contrast_processor.process(
-                    current_image, **params
-                )
+                result = self.auto_contrast_processor.process(current_image, **params)
                 processed_image = result.image
                 results.append(result)
 
             elif processor_type == "color_balance":
-                result = self.color_balance_processor.process(
-                    current_image, **params
-                )
+                result = self.color_balance_processor.process(current_image, **params)
                 processed_image = result.image
                 results.append(result)
 
             elif processor_type == "flatten":
-                result = self.flatten_processor.process(
-                    current_image, **params
-                )
+                result = self.flatten_processor.process(current_image, **params)
                 processed_image = result.image
                 results.append(result)
 

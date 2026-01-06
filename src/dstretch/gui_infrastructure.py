@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from tkinter import messagebox, ttk
-from typing import Any, Optional
+from typing import Any
 
 
 class ErrorManager:
@@ -57,7 +57,7 @@ class ErrorManager:
         self,
         error: Exception,
         context: str = "",
-        user_message: Optional[str] = None,
+        user_message: str | None = None,
         show_dialog: bool = True,
     ) -> bool:
         """Handle an error with logging and optional user notification."""
@@ -107,7 +107,7 @@ class ErrorManager:
         func: Callable,
         *args,
         context: str = "",
-        user_message: Optional[str] = None,
+        user_message: str | None = None,
         **kwargs,
     ) -> Any:
         """Safely execute a function with error handling."""
@@ -188,9 +188,9 @@ class AdvancedStatusBar:
 
     def set_image_info(
         self,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-        filename: Optional[str] = None,
+        width: int | None = None,
+        height: int | None = None,
+        filename: str | None = None,
     ):
         """Set image information."""
         if width and height:
@@ -206,7 +206,7 @@ class AdvancedStatusBar:
         self.zoom_info.set(f"{int(zoom_factor * 100)}%")
 
     def set_processing_info(
-        self, colorspace: Optional[str] = None, scale: Optional[float] = None
+        self, colorspace: str | None = None, scale: float | None = None
     ):
         """Set processing information."""
         if colorspace and scale:
@@ -214,7 +214,7 @@ class AdvancedStatusBar:
         else:
             self.process_info.set("")
 
-    def show_progress(self, value: Optional[float] = None):
+    def show_progress(self, value: float | None = None):
         """Show progress bar with optional value (0-100)."""
         if value is not None:
             self.progress_var.set(value)
@@ -366,7 +366,7 @@ class PerformanceManager:
         func: Callable,
         status_bar: AdvancedStatusBar,
         total_steps: int = 100,
-        step_callback: Optional[Callable] = None,
+        step_callback: Callable | None = None,
     ):
         """Execute a function with progress indication."""
 
@@ -386,7 +386,7 @@ class PerformanceManager:
                         time.sleep(0.01)  # Small delay for visual feedback
                 else:
                     result = func()
-                
+
                 status_bar.hide_progress()
                 return result
 
@@ -406,8 +406,8 @@ class ThreadManager:
     def execute_async(
         self,
         func: Callable,
-        callback: Optional[Callable] = None,
-        error_callback: Optional[Callable] = None,
+        callback: Callable | None = None,
+        error_callback: Callable | None = None,
         *args,
         **kwargs,
     ):
@@ -493,8 +493,8 @@ class GUIInfrastructure:
     def execute_async(
         self,
         func: Callable,
-        callback: Optional[Callable] = None,
-        error_callback: Optional[Callable] = None,
+        callback: Callable | None = None,
+        error_callback: Callable | None = None,
         *args,
         **kwargs,
     ):

@@ -16,12 +16,12 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from .exact_matrices import (
+    BUILTIN_MATRICES,
     D65_ILLUMINANT,
     RGB_TO_XYZ_MATRIX,
     XYZ_TO_RGB_MATRIX,
     build_srgb_to_linear_lut,
     build_xyz_to_lab_function_lut,
-    BUILTIN_MATRICES,
 )
 
 

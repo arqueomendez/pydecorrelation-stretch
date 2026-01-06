@@ -1,11 +1,12 @@
 import numpy as np
-import pytest
+
 from dstretch.colorspaces import (
-    RGBColorspace,
+    ColorspaceManager,
     LABColorspace,
+    RGBColorspace,
     YDSColorspace,
-    ColorspaceManager
 )
+
 
 class TestColorspaces:
     def setup_method(self):
@@ -17,10 +18,10 @@ class TestColorspaces:
         converted = cs.to_colorspace(self.image)
         # RGB to colorspace usually implies no change for RGBColorspace usually?
         # Base implementation might do normalization.
-        
+
         assert converted.shape == self.image.shape
         # assert converted.dtype == np.float32 # Usually float for processing
-        
+
         restored = cs.from_colorspace(converted)
         assert restored.shape == self.image.shape
         assert restored.dtype == np.uint8
@@ -28,14 +29,14 @@ class TestColorspaces:
     def test_lab_colorspace(self):
         cs = LABColorspace()
         converted = cs.to_colorspace(self.image)
-        
+
         assert converted.shape == self.image.shape
         assert not np.isnan(converted).any()
-        
+
         restored = cs.from_colorspace(converted)
         diff = np.mean(np.abs(self.image.astype(float) - restored.astype(float)))
         # Relax tolerance slightly due to colorspace conversion losses
-        assert diff < 8.0 
+        assert diff < 8.0
 
     def test_yds_colorspace(self):
         cs = YDSColorspace()
@@ -47,6 +48,6 @@ class TestColorspaces:
         spaces = self.manager.list_available()
         assert "RGB" in spaces
         assert "YDS" in spaces
-        
+
         cs = self.manager.get_colorspace("RGB")
         assert isinstance(cs, RGBColorspace)

@@ -249,9 +249,7 @@ class PixelInspectorPanel:
         self.color_frame = tk.Frame(
             info_frame, width=40, height=20, relief=tk.SUNKEN, bd=1
         )
-        self.color_frame.grid(
-            row=0, column=1, rowspan=2, sticky="ens", padx=(10, 0)
-        )
+        self.color_frame.grid(row=0, column=1, rowspan=2, sticky="ens", padx=(10, 0))
         self.color_frame.grid_propagate(False)
 
         # Control buttons
