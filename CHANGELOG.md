@@ -1,3 +1,14 @@
+## v0.4.0 (2026-01-06)
+
+### Feat
+
+- Implement core DStretch algorithms, colorspaces, processing pipeline, CLI, and GUI infrastructure with comprehensive tests, and update project version.
+- Add GitHub Actions workflows for continuous integration testing and release publishing.
+
+### Refactor
+
+- resolve all pyright type errors
+
 ## v0.3.0 (2026-01-06)
 
 ### Fix
