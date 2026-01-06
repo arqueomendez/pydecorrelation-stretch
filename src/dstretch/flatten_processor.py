@@ -58,7 +58,9 @@ class FlattenProcessor:
         self.last_background = None
         self.last_stats = None
 
-    def process(self, image: np.ndarray, params: FlattenParams | None = None) -> np.ndarray:
+    def process(
+        self, image: np.ndarray, params: FlattenParams | None = None
+    ) -> np.ndarray:
         """
         Apply flatten correction to an image.
 

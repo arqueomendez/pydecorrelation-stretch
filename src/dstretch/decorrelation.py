@@ -13,10 +13,11 @@ Autor principal: Víctor Méndez
 Asistido por: Claude Sonnet 4, Gemini 2.5 Pro, Copilot con GPT-4.1
 """
 
+from typing import Any, cast
+
 import cv2
 import numpy as np
 from scipy.linalg import eigh
-from typing import Any, cast
 
 from .colorspaces import COLORSPACES, BuiltinMatrixColorspace, ColorspaceManager
 
@@ -440,7 +441,7 @@ class DecorrelationStretch:
         processor = self._get_flatten_processor()
         result = processor.get_last_result()
         if result and hasattr(result, "statistics"):
-             return cast(Any, result).statistics
+            return cast(Any, result).statistics
         return {}
 
     def get_background_estimate(self) -> np.ndarray | None:

@@ -429,7 +429,7 @@ class ThreadManager:
                     err_cb = error_callback
                     self_obj = getattr(err_cb, "__self__", None)
                     if self_obj and hasattr(self_obj, "after"):
-                        self_obj.after(0, lambda: err_cb(e))
+                        self_obj.after(0, lambda err=e: err_cb(err))
                     else:
                         err_cb(e)
 

@@ -386,6 +386,7 @@ class CRGBColorspace(BuiltinMatrixColorspace):
     @property
     def optimized_for(self) -> list[str]:
         return ["red", "faint_pigments"]
+
     base_colorspace_name = "RGB"
 
     @property
@@ -409,6 +410,7 @@ class RGB0Colorspace(BuiltinMatrixColorspace):
     @property
     def optimized_for(self) -> list[str]:
         return ["red"]
+
     base_colorspace_name = "RGB"
 
     @property
@@ -428,6 +430,7 @@ class LABIColorspace(BuiltinMatrixColorspace):
     @property
     def optimized_for(self) -> list[str]:
         return ["special_effect"]
+
     base_colorspace_name = "LAB"
 
     @property

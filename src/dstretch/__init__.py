@@ -68,7 +68,6 @@ try:
     from .pipeline import (
         process_image_legacy as process_image_legacy,
     )
-
     from .pipeline import (
         quick_enhance as quick_enhance_pipeline,
     )

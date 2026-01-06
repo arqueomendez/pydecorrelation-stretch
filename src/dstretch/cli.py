@@ -9,15 +9,13 @@ operate on RGB images BEFORE decorrelation stretch.
 import argparse
 import sys
 from pathlib import Path
-import cv2
+
 import numpy as np
 
 from . import (
     DStretchPipeline,
     create_preprocessing_config,
     get_available_processors,
-    get_pipeline_info,
-    list_available_colorspaces,
     get_pipeline_info,
     list_available_colorspaces,
     process_with_preset,
@@ -357,7 +355,9 @@ Examples:
             # Use enhancement preset
             if args.verbose:
                 print(f"Applying preset: {args.preset}")
-            result = process_with_preset(image, args.preset, args.colorspace, args.scale)
+            result = process_with_preset(
+                image, args.preset, args.colorspace, args.scale
+            )
 
         elif args.preprocessing_only:
             # Apply only preprocessing
@@ -469,7 +469,7 @@ Examples:
             # Array result (legacy/fallback)
             cv2.imwrite(str(output_path), cv2.cvtColor(result, cv2.COLOR_RGB2BGR))
             if args.verbose:
-                 print(f"Final dimensions: {result.shape}")
+                print(f"Final dimensions: {result.shape}")
         else:
             # CompletePipelineResult
             result.save_final(str(output_path))
@@ -488,10 +488,12 @@ Examples:
                     print(
                         f"Applied preprocessing steps: {result.get_preprocessing_names()}"
                     )
-                print(f"Decorrelation colorspace: {result.decorrelation_result.colorspace}")
+                print(
+                    f"Decorrelation colorspace: {result.decorrelation_result.colorspace}"
+                )
                 print(f"Decorrelation scale: {result.decorrelation_result.scale}")
                 print(f"Final dimensions: {result.final_image.shape}")
-        
+
         print(f"Successfully processed '{input_path}' -> '{output_path}'")
 
     except Exception as e:
