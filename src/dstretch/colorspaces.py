@@ -31,9 +31,23 @@ class AbstractColorspace(ABC):
 
     # Abstract attributes to be defined in subclasses
     # Abstract attributes to be defined in subclasses
-    name: str
-    description: str
-    optimized_for: list[str]
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        """Name of the colorspace."""
+        pass
+
+    @property
+    @abstractmethod
+    def description(self) -> str:
+        """Description of the colorspace."""
+        pass
+
+    @property
+    @abstractmethod
+    def optimized_for(self) -> list[str]:
+        """List of use cases this colorspace is optimized for."""
+        pass
 
     @property
     def scale_adjust_factor(self) -> float:
@@ -74,9 +88,17 @@ class BuiltinMatrixColorspace(AbstractColorspace):
 
 class RGBColorspace(AbstractColorspace):
     # ... (sin cambios)
-    name = "RGB"
-    description = "Standard RGB. Fast, general purpose."
-    optimized_for = ["general"]
+    @property
+    def name(self) -> str:
+        return "RGB"
+
+    @property
+    def description(self) -> str:
+        return "Standard RGB. Fast, general purpose."
+
+    @property
+    def optimized_for(self) -> list[str]:
+        return ["general"]
 
     def to_colorspace(self, rgb_image: np.ndarray) -> np.ndarray:
         return rgb_image.astype(np.float64)
@@ -87,9 +109,17 @@ class RGBColorspace(AbstractColorspace):
 
 class LABColorspace(AbstractColorspace):
     # ... (sin cambios)
-    name = "LAB"
-    description = "CIE LAB. Perceptually uniform."
-    optimized_for = ["general", "natural_colors", "whites", "blacks"]
+    @property
+    def name(self) -> str:
+        return "LAB"
+
+    @property
+    def description(self) -> str:
+        return "CIE LAB. Perceptually uniform."
+
+    @property
+    def optimized_for(self) -> list[str]:
+        return ["general", "natural_colors", "whites", "blacks"]
 
     @property
     def scale_adjust_factor(self) -> float:
@@ -345,9 +375,17 @@ class LYEColorspace(LXXColorspace):
 
 
 class CRGBColorspace(BuiltinMatrixColorspace):
-    name = "CRGB"
-    description = "Pre-calculated matrix for faint reds"
-    optimized_for = ["red", "faint_pigments"]
+    @property
+    def name(self) -> str:
+        return "CRGB"
+
+    @property
+    def description(self) -> str:
+        return "Pre-calculated matrix for faint reds"
+
+    @property
+    def optimized_for(self) -> list[str]:
+        return ["red", "faint_pigments"]
     base_colorspace_name = "RGB"
 
     @property
@@ -360,9 +398,17 @@ class CRGBColorspace(BuiltinMatrixColorspace):
 
 
 class RGB0Colorspace(BuiltinMatrixColorspace):
-    name = "RGB0"
-    description = "Built-in matrix for enhancing reds"
-    optimized_for = ["red"]
+    @property
+    def name(self) -> str:
+        return "RGB0"
+
+    @property
+    def description(self) -> str:
+        return "Built-in matrix for enhancing reds"
+
+    @property
+    def optimized_for(self) -> list[str]:
+        return ["red"]
     base_colorspace_name = "RGB"
 
     @property
@@ -371,9 +417,17 @@ class RGB0Colorspace(BuiltinMatrixColorspace):
 
 
 class LABIColorspace(BuiltinMatrixColorspace):
-    name = "LABI"
-    description = "Built-in matrix for inverted colors (applied in LAB space)"
-    optimized_for = ["special_effect"]
+    @property
+    def name(self) -> str:
+        return "LABI"
+
+    @property
+    def description(self) -> str:
+        return "Built-in matrix for inverted colors (applied in LAB space)"
+
+    @property
+    def optimized_for(self) -> list[str]:
+        return ["special_effect"]
     base_colorspace_name = "LAB"
 
     @property

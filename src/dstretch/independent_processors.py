@@ -135,9 +135,11 @@ class InvertProcessor(BaseProcessor):
             "processing_time": "instant",
         }
 
-        return ProcessingResult(
+        result = ProcessingResult(
             image=inverted, processor_type=self.name, parameters={}, statistics=stats
         )
+        self._last_result = result
+        return result
 
 
 class AutoContrastProcessor(BaseProcessor):
@@ -211,12 +213,14 @@ class AutoContrastProcessor(BaseProcessor):
             "equalize": equalize,
         }
 
-        return ProcessingResult(
+        result = ProcessingResult(
             image=enhanced_image,
             processor_type=self.name,
             parameters=parameters,
             statistics=stats,
         )
+        self._last_result = result
+        return result
 
     def _stretch_histogram(
         self, channel: np.ndarray, saturated_pixels: float, normalize: bool
@@ -319,12 +323,14 @@ class ColorBalanceProcessor(BaseProcessor):
             "percentile_clip": percentile_clip,
         }
 
-        return ProcessingResult(
+        result = ProcessingResult(
             image=result_image,
             processor_type=self.name,
             parameters=parameters,
             statistics=stats,
         )
+        self._last_result = result
+        return result
 
     def _gray_world_balance(
         self, image: np.ndarray, strength: float, percentile_clip: float
@@ -576,12 +582,14 @@ class FlattenProcessor(BaseProcessor):
             "auto_scale": auto_scale,
         }
 
-        return ProcessingResult(
+        result = ProcessingResult(
             image=flattened_image,
             processor_type=self.name,
             parameters=parameters,
             statistics=stats,
         )
+        self._last_result = result
+        return result
 
     def _bandpass_filter(
         self, image: np.ndarray, large: int, small: int, suppress_stripes: bool

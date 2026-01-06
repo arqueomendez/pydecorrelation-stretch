@@ -1,0 +1,71 @@
+g:\dstretch_python\src\dstretch\__init__.py
+  g:\dstretch_python\src\dstretch\__init__.py:207:20 - error: Object of type "None" cannot be called (reportOptionalCall)
+g:\dstretch_python\src\dstretch\cli.py
+  g:\dstretch_python\src\dstretch\cli.py:466:16 - error: Cannot access attribute "save_final" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "save_final" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:469:46 - error: Cannot access attribute "has_preprocessing" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "has_preprocessing" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:473:20 - error: Cannot access attribute "save_preprocessed" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "save_preprocessed" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:480:23 - error: Cannot access attribute "has_preprocessing" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "has_preprocessing" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:482:60 - error: Cannot access attribute "get_preprocessing_names" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "get_preprocessing_names" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:484:55 - error: Cannot access attribute "decorrelation_result" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "decorrelation_result" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:485:50 - error: Cannot access attribute "decorrelation_result" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "decorrelation_result" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:486:47 - error: Cannot access attribute "final_image" for class "ndarray[_AnyShape, dtype[Any]]"
+  ┬á┬áAttribute "final_image" is unknown (reportAttributeAccessIssue)
+g:\dstretch_python\src\dstretch\colorspaces.py
+  g:\dstretch_python\src\dstretch\colorspaces.py:91:5 - error: "name" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:91:12 - error: Type "Literal['RGB']" is not assignable to declared type "property"
+  ┬á┬á"Literal['RGB']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:92:5 - error: "description" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:92:19 - error: Type "Literal['Standard RGB. Fast, general purpose.']" is not assignable to declared type "property"
+  ┬á┬á"Literal['Standard RGB. Fast, general purpose.']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:93:5 - error: "optimized_for" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:93:21 - error: Type "list[str]" is not assignable to declared type "property"
+  ┬á┬á"list[str]" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:104:5 - error: "name" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:104:12 - error: Type "Literal['LAB']" is not assignable to declared type "property"
+  ┬á┬á"Literal['LAB']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:105:5 - error: "description" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:105:19 - error: Type "Literal['CIE LAB. Perceptually uniform.']" is not assignable to declared type "property"
+  ┬á┬á"Literal['CIE LAB. Perceptually uniform.']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:106:5 - error: "optimized_for" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:106:21 - error: Type "list[str]" is not assignable to declared type "property"
+  ┬á┬á"list[str]" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:362:5 - error: "name" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:362:12 - error: Type "Literal['CRGB']" is not assignable to declared type "property"
+  ┬á┬á"Literal['CRGB']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:363:5 - error: "description" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:363:19 - error: Type "Literal['Pre-calculated matrix for faint reds']" is not assignable to declared type "property"
+  ┬á┬á"Literal['Pre-calculated matrix for faint reds']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:364:5 - error: "optimized_for" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:364:21 - error: Type "list[str]" is not assignable to declared type "property"
+  ┬á┬á"list[str]" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:377:5 - error: "name" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:377:12 - error: Type "Literal['RGB0']" is not assignable to declared type "property"
+  ┬á┬á"Literal['RGB0']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:378:5 - error: "description" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:378:19 - error: Type "Literal['Built-in matrix for enhancing reds']" is not assignable to declared type "property"
+  ┬á┬á"Literal['Built-in matrix for enhancing reds']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:379:5 - error: "optimized_for" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:379:21 - error: Type "list[str]" is not assignable to declared type "property"
+  ┬á┬á"list[str]" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:388:5 - error: "name" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:388:12 - error: Type "Literal['LABI']" is not assignable to declared type "property"
+  ┬á┬á"Literal['LABI']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:389:5 - error: "description" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:389:19 - error: Type "Literal['Built-in matrix for inverted colors (applied in LAÔÇª']" is not assignable to declared type "property"
+  ┬á┬á"Literal['Built-in matrix for inverted colors (applied in LAÔÇª']" is not assignable to "property" (reportAssignmentType)
+  g:\dstretch_python\src\dstretch\colorspaces.py:390:5 - error: "optimized_for" incorrectly overrides property of same name in class "AbstractColorspace" (reportIncompatibleMethodOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:390:21 - error: Type "list[str]" is not assignable to declared type "property"
+  ┬á┬á"list[str]" is not assignable to "property" (reportAssignmentType)
+g:\dstretch_python\src\dstretch\decorrelation.py
+  g:\dstretch_python\src\dstretch\decorrelation.py:357:23 - error: Cannot access attribute "statistics" for class "object"
+  ┬á┬áAttribute "statistics" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:442:28 - error: Cannot access attribute "statistics" for class "object"
+  ┬á┬áAttribute "statistics" is unknown (reportAttributeAccessIssue)
+41 errors, 0 warnings, 0 informations

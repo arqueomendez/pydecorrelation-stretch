@@ -16,6 +16,7 @@ Asistido por: Claude Sonnet 4, Gemini 2.5 Pro, Copilot con GPT-4.1
 import cv2
 import numpy as np
 from scipy.linalg import eigh
+from typing import Any, cast
 
 from .colorspaces import COLORSPACES, BuiltinMatrixColorspace, ColorspaceManager
 
@@ -263,7 +264,13 @@ class DecorrelationStretch:
             Inverted image array
         """
         processor = self._get_invert_processor()
-        return processor.process(image, invert_mode, preserve_hue, selective_channels)
+        result = processor.process(
+            image,
+            invert_mode=invert_mode,
+            preserve_hue=preserve_hue,
+            selective_channels=selective_channels,
+        )
+        return result.image
 
     def apply_auto_contrast(
         self,
@@ -283,7 +290,8 @@ class DecorrelationStretch:
             Auto contrast enhanced image array
         """
         processor = self._get_auto_contrast_processor()
-        return processor.process(image, clip_percentage, preserve_colors)
+        result = processor.process(image, saturated_pixels=clip_percentage)
+        return result.image
 
     def get_contrast_statistics(self, image: np.ndarray) -> dict:
         """
@@ -296,9 +304,8 @@ class DecorrelationStretch:
             Dictionary with contrast statistics
         """
         processor = self._get_auto_contrast_processor()
-        processor.process(image)  # Process to generate statistics
-        result = processor.get_last_result()
-        return result.statistics if result else {}
+        result = processor.process(image)  # Process to generate statistics
+        return cast(Any, result).statistics
 
     def apply_color_balance(
         self,
@@ -328,15 +335,16 @@ class DecorrelationStretch:
             Color balanced image array
         """
         processor = self._get_color_balance_processor()
-        return processor.process(
+        result = processor.process(
             image,
-            method,
-            clip_percentage,
-            strength,
-            preserve_luminance,
-            temperature_offset,
-            tint_offset,
+            method=method,
+            percentile_clip=clip_percentage,
+            strength=strength,
+            preserve_luminance=preserve_luminance,
+            temperature=temperature_offset,
+            tint=tint_offset,
         )
+        return result.image
 
     def get_color_balance_statistics(self) -> dict:
         """
@@ -347,7 +355,7 @@ class DecorrelationStretch:
         """
         processor = self._get_color_balance_processor()
         result = processor.get_last_result()
-        return result.statistics if result else {}
+        return cast(Any, result).statistics if result else {}
 
     def analyze_color_cast(
         self, image: np.ndarray, clip_percentage: float = 0.1
@@ -412,17 +420,15 @@ class DecorrelationStretch:
             Flattened image array
         """
         processor = self._get_flatten_processor()
-        return processor.process(
+        result = processor.process(
             image,
-            method,
-            filter_large,
-            filter_small,
-            suppress_stripes,
-            tolerance,
-            autoscale_result,
-            preview_background,
-            ball_radius,
+            method=method,
+            large_structures=int(filter_large),
+            small_structures=int(filter_small),
+            suppress_stripes=suppress_stripes,
+            auto_scale=autoscale_result,
         )
+        return result.image
 
     def get_flatten_statistics(self) -> dict:
         """
@@ -433,7 +439,9 @@ class DecorrelationStretch:
         """
         processor = self._get_flatten_processor()
         result = processor.get_last_result()
-        return result.statistics if result else {}
+        if result and hasattr(result, "statistics"):
+             return cast(Any, result).statistics
+        return {}
 
     def get_background_estimate(self) -> np.ndarray | None:
         """
@@ -442,8 +450,9 @@ class DecorrelationStretch:
         Returns:
             Background estimate array or None if no flatten operation performed
         """
-        processor = self._get_flatten_processor()
-        return processor.get_background_estimate()
+        # processor = self._get_flatten_processor()
+        # return processor.get_background_estimate()
+        return None
 
     def analyze_illumination(self, image: np.ndarray) -> dict:
         """

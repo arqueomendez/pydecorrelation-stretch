@@ -69,9 +69,15 @@ try:
         process_image_legacy as process_image_legacy,
     )
 
+    from .pipeline import (
+        quick_enhance as quick_enhance_pipeline,
+    )
+
     PIPELINE_AVAILABLE = True
 except ImportError:
     PIPELINE_AVAILABLE = False
+    DStretchPipeline = None
+    quick_enhance_pipeline = None
 
 # Colorspaces
 # Colorspaces
@@ -126,8 +132,10 @@ def list_available_colorspaces():
 
 
 def get_available_processors():
-    """Get list of available processor types."""
-    return ProcessorFactory.get_available_processors()
+    """Get dictionary of available processors and their descriptions."""
+    pipeline = PreprocessingPipeline()
+    info = pipeline.get_all_processors_info()
+    return {v["name"]: v["description"] for k, v in info.items()}
 
 
 def get_pipeline_info():
@@ -195,7 +203,7 @@ def process_image(image, preprocessing_steps=None, colorspace="YDS", scale=15.0)
     Returns:
         Processed image or tuple with results
     """
-    if PIPELINE_AVAILABLE:
+    if PIPELINE_AVAILABLE and DStretchPipeline:
         pipeline = DStretchPipeline()
         return pipeline.process_complete(image, preprocessing_steps, colorspace, scale)
     else:
@@ -227,8 +235,8 @@ def process_with_preset(image, preset="standard", colorspace=None, scale=None):
     Returns:
         Processed image
     """
-    if PIPELINE_AVAILABLE:
-        return quick_enhance(image, preset, colorspace or "YDS", scale or 15.0)
+    if PIPELINE_AVAILABLE and quick_enhance_pipeline:
+        return quick_enhance_pipeline(image, preset, colorspace or "YDS", scale or 15.0)
     else:
         # Fallback to simple enhancement
         return quick_enhance(image, preset)

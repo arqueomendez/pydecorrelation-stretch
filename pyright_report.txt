@@ -1,0 +1,53 @@
+g:\dstretch_python\src\dstretch\__init__.py
+  g:\dstretch_python\src\dstretch\__init__.py:199:20 - error: "DStretchPipeline" is possibly unbound (reportPossiblyUnboundVariable)
+  g:\dstretch_python\src\dstretch\__init__.py:231:45 - error: Expected 2 positional arguments (reportCallIssue)
+g:\dstretch_python\src\dstretch\cli.py
+  g:\dstretch_python\src\dstretch\cli.py:254:45 - error: Cannot access attribute "items" for class "list[ProcessorType]"
+  ┬á┬áAttribute "items" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\cli.py:356:56 - error: Expected 2 positional arguments (reportCallIssue)
+  g:\dstretch_python\src\dstretch\cli.py:403:41 - error: Cannot access attribute "processor_name" for class "ProcessingResult"
+  ┬á┬áAttribute "processor_name" is unknown (reportAttributeAccessIssue)
+g:\dstretch_python\src\dstretch\color_balance_processor.py
+  g:\dstretch_python\src\dstretch\color_balance_processor.py:55:63 - error: Expression of type "None" cannot be assigned to parameter of type "ColorBalanceParams"
+  ┬á┬á"None" is not assignable to "ColorBalanceParams" (reportArgumentType)
+g:\dstretch_python\src\dstretch\colorspaces.py
+  g:\dstretch_python\src\dstretch\colorspaces.py:153:9 - error: "name" overrides symbol of same name in class "AbstractColorspace"
+  ┬á┬á"property" is not assignable to "str" (reportIncompatibleVariableOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:157:9 - error: "description" overrides symbol of same name in class "AbstractColorspace"
+  ┬á┬á"property" is not assignable to "str" (reportIncompatibleVariableOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:161:9 - error: "optimized_for" overrides symbol of same name in class "AbstractColorspace"
+  ┬á┬á"property" is not assignable to "list[str]" (reportIncompatibleVariableOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:204:9 - error: "name" overrides symbol of same name in class "AbstractColorspace"
+  ┬á┬á"property" is not assignable to "str" (reportIncompatibleVariableOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:208:9 - error: "description" overrides symbol of same name in class "AbstractColorspace"
+  ┬á┬á"property" is not assignable to "str" (reportIncompatibleVariableOverride)
+  g:\dstretch_python\src\dstretch\colorspaces.py:212:9 - error: "optimized_for" overrides symbol of same name in class "AbstractColorspace"
+  ┬á┬á"property" is not assignable to "list[str]" (reportIncompatibleVariableOverride)
+g:\dstretch_python\src\dstretch\decorrelation.py
+  g:\dstretch_python\src\dstretch\decorrelation.py:266:41 - error: Expected 1 positional argument (reportCallIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:286:41 - error: Expected 1 positional argument (reportCallIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:301:23 - error: Cannot access attribute "statistics" for class "object"
+  ┬á┬áAttribute "statistics" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:333:13 - error: Expected 1 positional argument (reportCallIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:350:23 - error: Cannot access attribute "statistics" for class "object"
+  ┬á┬áAttribute "statistics" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:417:13 - error: Expected 1 positional argument (reportCallIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:436:23 - error: Cannot access attribute "statistics" for class "object"
+  ┬á┬áAttribute "statistics" is unknown (reportAttributeAccessIssue)
+  g:\dstretch_python\src\dstretch\decorrelation.py:446:26 - error: Cannot access attribute "get_background_estimate" for class "FlattenProcessor"
+  ┬á┬áAttribute "get_background_estimate" is unknown (reportAttributeAccessIssue)
+g:\dstretch_python\src\dstretch\flatten_processor.py
+  g:\dstretch_python\src\dstretch\flatten_processor.py:61:66 - error: Expression of type "None" cannot be assigned to parameter of type "FlattenParams"
+  ┬á┬á"None" is not assignable to "FlattenParams" (reportArgumentType)
+  g:\dstretch_python\src\dstretch\flatten_processor.py:416:16 - error: Type "floating[Any] | float64 | float" is not assignable to return type "float"
+  ┬á┬áType "floating[Any] | float64 | float" is not assignable to type "float"
+  ┬á┬á┬á┬á"floating[Any]" is not assignable to "float" (reportReturnType)
+g:\dstretch_python\src\dstretch\gui_infrastructure.py
+  g:\dstretch_python\src\dstretch\gui_infrastructure.py:423:51 - error: Object of type "None" cannot be called (reportOptionalCall)
+  g:\dstretch_python\src\dstretch\gui_infrastructure.py:430:57 - error: Object of type "None" cannot be called (reportOptionalCall)
+  g:\dstretch_python\src\dstretch\gui_infrastructure.py:443:45 - error: Expression of type "None" cannot be assigned to parameter of type "float"
+  ┬á┬á"None" is not assignable to "float" (reportArgumentType)
+g:\dstretch_python\src\dstretch\pixel_inspector.py
+  g:\dstretch_python\src\dstretch\pixel_inspector.py:309:33 - error: "get" is not a known attribute of "None" (reportOptionalMemberAccess)
+  g:\dstretch_python\src\dstretch\pixel_inspector.py:321:33 - error: "get" is not a known attribute of "None" (reportOptionalMemberAccess)
+27 errors, 0 warnings, 0 informations

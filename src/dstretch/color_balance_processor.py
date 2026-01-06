@@ -52,7 +52,7 @@ class ColorBalanceProcessor:
         self.last_stats = None
 
     def process(
-        self, image: np.ndarray, params: ColorBalanceParams = None
+        self, image: np.ndarray, params: ColorBalanceParams | None = None
     ) -> np.ndarray:
         """
         Apply color balance to an image.

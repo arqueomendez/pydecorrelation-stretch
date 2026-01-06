@@ -417,19 +417,21 @@ class ThreadManager:
             try:
                 result = func(*args, **kwargs)
                 if callback:
+                    cb = callback
                     # Schedule callback on main thread
-                    self_obj = getattr(callback, "__self__", None)
+                    self_obj = getattr(cb, "__self__", None)
                     if self_obj and hasattr(self_obj, "after"):
-                        self_obj.after(0, lambda: callback(result))
+                        self_obj.after(0, lambda: cb(result))
                     else:
-                        callback(result)
+                        cb(result)
             except Exception as e:
                 if error_callback:
-                    self_obj = getattr(error_callback, "__self__", None)
+                    err_cb = error_callback
+                    self_obj = getattr(err_cb, "__self__", None)
                     if self_obj and hasattr(self_obj, "after"):
-                        self_obj.after(0, lambda err=e: error_callback(err))
+                        self_obj.after(0, lambda: err_cb(e))
                     else:
-                        error_callback(e)
+                        err_cb(e)
 
         thread = threading.Thread(target=thread_wrapper, daemon=True)
         thread.start()
@@ -440,7 +442,7 @@ class ThreadManager:
 
         return thread
 
-    def wait_for_all(self, timeout: float = None):
+    def wait_for_all(self, timeout: float | None = None):
         """Wait for all active threads to complete."""
         for thread in self.active_threads:
             thread.join(timeout)

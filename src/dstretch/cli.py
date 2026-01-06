@@ -9,6 +9,8 @@ operate on RGB images BEFORE decorrelation stretch.
 import argparse
 import sys
 from pathlib import Path
+import cv2
+import numpy as np
 
 from . import (
     DStretchPipeline,
@@ -16,7 +18,9 @@ from . import (
     get_available_processors,
     get_pipeline_info,
     list_available_colorspaces,
-    quick_enhance,
+    get_pipeline_info,
+    list_available_colorspaces,
+    process_with_preset,
 )
 
 
@@ -353,7 +357,7 @@ Examples:
             # Use enhancement preset
             if args.verbose:
                 print(f"Applying preset: {args.preset}")
-            result = quick_enhance(image, args.preset, args.colorspace, args.scale)
+            result = process_with_preset(image, args.preset, args.colorspace, args.scale)
 
         elif args.preprocessing_only:
             # Apply only preprocessing
@@ -400,7 +404,7 @@ Examples:
             if args.verbose:
                 print(f"Applied {len(processor_results)} preprocessing steps:")
                 for result in processor_results:
-                    print(f"  - {result.processor_name}: {result.parameters}")
+                    print(f"  - {result.processor_type}: {result.parameters}")
 
             sys.exit(0)
 
@@ -460,28 +464,35 @@ Examples:
                 args.scale,
             )
 
-        # Save final result
-        result.save_final(str(output_path))
-
-        # Save preprocessed image if requested
-        if args.save_preprocessed and result.has_preprocessing():
-            preprocessed_path = output_path.with_stem(
-                f"{output_path.stem}_preprocessed"
-            )
-            result.save_preprocessed(str(preprocessed_path))
+        # Save result
+        if isinstance(result, np.ndarray):
+            # Array result (legacy/fallback)
+            cv2.imwrite(str(output_path), cv2.cvtColor(result, cv2.COLOR_RGB2BGR))
             if args.verbose:
-                print(f"Saved preprocessed image: {preprocessed_path}")
+                 print(f"Final dimensions: {result.shape}")
+        else:
+            # CompletePipelineResult
+            result.save_final(str(output_path))
 
-        print(f"Successfully processed '{input_path}' -> '{output_path}'")
-
-        if args.verbose:
-            if result.has_preprocessing():
-                print(
-                    f"Applied preprocessing steps: {result.get_preprocessing_names()}"
+            # Save preprocessed image if requested
+            if args.save_preprocessed and result.has_preprocessing():
+                preprocessed_path = output_path.with_stem(
+                    f"{output_path.stem}_preprocessed"
                 )
-            print(f"Decorrelation colorspace: {result.decorrelation_result.colorspace}")
-            print(f"Decorrelation scale: {result.decorrelation_result.scale}")
-            print(f"Final dimensions: {result.final_image.shape}")
+                result.save_preprocessed(str(preprocessed_path))
+                if args.verbose:
+                    print(f"Saved preprocessed image: {preprocessed_path}")
+
+            if args.verbose:
+                if result.has_preprocessing():
+                    print(
+                        f"Applied preprocessing steps: {result.get_preprocessing_names()}"
+                    )
+                print(f"Decorrelation colorspace: {result.decorrelation_result.colorspace}")
+                print(f"Decorrelation scale: {result.decorrelation_result.scale}")
+                print(f"Final dimensions: {result.final_image.shape}")
+        
+        print(f"Successfully processed '{input_path}' -> '{output_path}'")
 
     except Exception as e:
         print(f"Error processing image: {e}", file=sys.stderr)

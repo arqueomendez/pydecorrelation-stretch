@@ -58,7 +58,7 @@ class FlattenProcessor:
         self.last_background = None
         self.last_stats = None
 
-    def process(self, image: np.ndarray, params: FlattenParams = None) -> np.ndarray:
+    def process(self, image: np.ndarray, params: FlattenParams | None = None) -> np.ndarray:
         """
         Apply flatten correction to an image.
 
@@ -413,7 +413,7 @@ class FlattenProcessor:
         cv = std_val / (mean_val + 1e-8)
 
         # Return inverse (higher is more uniform)
-        return 1.0 / (1.0 + cv)
+        return float(1.0 / (1.0 + cv))
 
     def get_flatten_statistics(self) -> dict:
         """Get statistics from the last flatten operation."""

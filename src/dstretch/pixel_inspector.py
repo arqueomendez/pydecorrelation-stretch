@@ -306,7 +306,7 @@ class PixelInspectorPanel:
 
     def _on_mouse_click(self, event):
         """Handle mouse click - toggle freeze."""
-        if not self.enabled_var.get() or self.current_image is None:
+        if self.enabled_var is None or not self.enabled_var.get() or self.current_image is None:
             return
 
         x, y = self._canvas_to_image_coords(event.x, event.y)
@@ -318,7 +318,7 @@ class PixelInspectorPanel:
 
     def _on_mouse_leave(self, event):
         """Handle mouse leaving canvas."""
-        if not self.enabled_var.get() or self.is_frozen:
+        if self.enabled_var is None or not self.enabled_var.get() or self.is_frozen:
             return
         self._clear_display()
 
