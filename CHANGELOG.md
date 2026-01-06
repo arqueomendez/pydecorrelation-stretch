@@ -1,3 +1,9 @@
+## v0.3.0 (2026-01-06)
+
+### Fix
+
+- **formalizacion-de-archivos,-actualización-de-datos,-integración-de-ruff,-pyright,-pytest-y-CD/CI**: formalizacion de archivos, actualización de datos, integración de ruff, pyright, pytest y CD/CI
+
 ## v0.2.0 (2026-01-06)
 
 ### Feat
