@@ -1600,9 +1600,9 @@ tifffile==2025.5.10 ; python_full_version == '3.10.*' \
     --hash=sha256:018335d34283aa3fd8c263bae5c3c2b661ebc45548fde31504016fcae7bf1103 \
     --hash=sha256:e37147123c0542d67bc37ba5cdd67e12ea6fbe6e86c52bee037a9eb6a064e5ad
     # via scikit-image
-tifffile==2025.8.28 ; python_full_version >= '3.11' \
-    --hash=sha256:82929343c70f6f776983f6a817f0b92e913a1bbb3dc3f436af44419b872bb467 \
-    --hash=sha256:b274a6d9eeba65177cf7320af25ef38ecf910b3369ac6bc494a94a3f6bd99c78
+tifffile==2025.12.20 ; python_full_version >= '3.11' \
+    --hash=sha256:bc0345a20675149353cfcb3f1c48d0a3654231ee26bd46beebaab4d2168feeb6 \
+    --hash=sha256:cb8a4fee327d15b3e3eeac80bbdd8a53b323c80473330bcfb99418ee4c1c827f
     # via scikit-image
 zipp==3.20.2 ; python_full_version < '3.9' \
     --hash=sha256:a817ac80d6cf4b23bf7f2828b7cabf326f15a001bea8b1f9b49631780ba28350 \
