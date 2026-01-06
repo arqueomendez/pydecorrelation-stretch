@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dstretch-python"
-version = "0.1.0"
+version = "0.2.0"
 description = "Python implementation of DStretch decorrelation stretch for rock art analysis"
 authors = [{name = "Your Name", email = "your.email@example.com"}]
 license = {text = "MIT"}
