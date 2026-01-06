@@ -24,6 +24,9 @@ import logging
 import gc
 from typing import Optional, Dict, Any, List
 
+# Disable Pillow image limit
+Image.MAX_IMAGE_PIXELS = None
+
 # Import DStretch components (with error handling)
 try:
     from .decorrelation import DecorrelationStretch
@@ -170,7 +173,7 @@ class DStretchGUI:
         self.root.geometry(f"{w}x{h}")
         self.dstretch = DecorrelationStretch() if DecorrelationStretch else None
         self.original_image, self.preprocessed_image, self.processed_image = None, None, None
-        self.max_image_size = (2048, 2048)
+        self.original_dimensions = None
         self.current_colorspace = "YDS"
         self.active_processors = set()
         self.advanced_settings = self._get_default_advanced_settings()
@@ -376,9 +379,11 @@ class DStretchGUI:
         if filename:
             try:
                 img = Image.open(filename)
-                if max(img.size) > 3000: img.thumbnail((3000, 3000), Image.Resampling.LANCZOS)
+                # Removed thumbnail resizing
+                # if max(img.size) > 3000: img.thumbnail((3000, 3000), Image.Resampling.LANCZOS)
                 if img.mode != 'RGB': img = img.convert('RGB')
                 self.original_image = np.array(img, dtype=np.uint8)
+                self.original_dimensions = (self.original_image.shape[0], self.original_image.shape[1])
                 self.preprocessed_image = self.original_image.copy()
                 self.processed_image = self.original_image.copy()
                 self.canvas.set_image(self.original_image); self._restore_settings()
@@ -402,11 +407,12 @@ class DStretchGUI:
     def _optimize_image_for_processing(self, image):
         if image is None: return None
         if image.dtype != np.uint8: image = np.clip(image, 0, 255).astype(np.uint8)
-        h, w = image.shape[:2]; max_h, max_w = self.max_image_size
-        if h > max_h or w > max_w:
-            scale = min(max_h / h, max_w / w); nw, nh = int(w * scale), int(h * scale)
-            self._set_status(f"Resizing for processing: {w}x{h} -> {nw}x{nh}")
-            return cv2.resize(image, (nw, nh), interpolation=cv2.INTER_AREA)
+        # Removed resizing logic to process at full resolution
+        # h, w = image.shape[:2]; max_h, max_w = self.max_image_size
+        # if h > max_h or w > max_w:
+        #     scale = min(max_h / h, max_w / w); nw, nh = int(w * scale), int(h * scale)
+        #     self._set_status(f"Resizing for processing: {w}x{h} -> {nw}x{nh}")
+        #     return cv2.resize(image, (nw, nh), interpolation=cv2.INTER_AREA)
         return image
     
     def _select_colorspace(self, name):
@@ -481,7 +487,24 @@ class DStretchGUI:
         default = f"enhanced_{self.current_colorspace}_scale{int(self.scale_var.get())}.jpg"
         filename = filedialog.asksaveasfilename(title="Save Enhanced Image", initialfile=default, filetypes=[("JPEG", "*.jpg"), ("PNG", "*.png"), ("TIFF", "*.tiff")], defaultextension='.jpg')
         if filename:
-            try: Image.fromarray(self.processed_image).save(filename); self._set_status(f"Saved: {Path(filename).name}")
+            try:
+                image_to_save = self.processed_image.copy()
+                
+                # Resize back to original dimensions if needed
+                if self.original_dimensions is not None:
+                    current_h, current_w = image_to_save.shape[:2]
+                    orig_h, orig_w = self.original_dimensions
+                    if (current_h, current_w) != (orig_h, orig_w):
+                        image_to_save = cv2.resize(image_to_save, (orig_w, orig_h), interpolation=cv2.INTER_LANCZOS4)
+                
+                # Configure save options
+                save_kwargs = {}
+                if filename.lower().endswith(('.jpg', '.jpeg')):
+                    save_kwargs['quality'] = 95
+                    save_kwargs['subsampling'] = 0
+                    
+                Image.fromarray(image_to_save).save(filename, **save_kwargs)
+                self._set_status(f"Saved: {Path(filename).name}")
             except Exception as e: messagebox.showerror("Save Error", f"Could not save image:\n{e}")
     
     def _reset_button_states(self):
