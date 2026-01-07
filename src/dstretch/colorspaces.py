@@ -24,6 +24,14 @@ from .exact_matrices import (
     build_xyz_to_lab_function_lut,
 )
 
+# Try to import numba utils, handle ImportError gracefully if Numba is not active
+try:
+    from . import numba_utils
+    NUMBA_AVAILABLE = True
+except ImportError:
+    NUMBA_AVAILABLE = False
+    numba_utils = None
+
 
 # --- CLASES BASE (sin cambios) ---
 class AbstractColorspace(ABC):
@@ -126,17 +134,29 @@ class LABColorspace(AbstractColorspace):
         return 1.5
 
     def __init__(self):
-        self.D65_WHITE, self.RGB_TO_XYZ, self.XYZ_TO_RGB = (
-            D65_ILLUMINANT,
-            RGB_TO_XYZ_MATRIX,
-            XYZ_TO_RGB_MATRIX,
-        )
-        self.rgb_to_xyz_lut = build_srgb_to_linear_lut()
-        self.xyz_to_lab_lut = build_xyz_to_lab_function_lut()
+        # Optimization: Use float32 for all constants and LUTs to save memory
+        self.D65_WHITE = D65_ILLUMINANT.astype(np.float32)
+        self.RGB_TO_XYZ = RGB_TO_XYZ_MATRIX.astype(np.float32)
+        self.XYZ_TO_RGB = XYZ_TO_RGB_MATRIX.astype(np.float32)
+        
+        self.rgb_to_xyz_lut = build_srgb_to_linear_lut().astype(np.float32)
+        self.xyz_to_lab_lut = build_xyz_to_lab_function_lut().astype(np.float32)
 
     def to_colorspace(self, rgb_image: np.ndarray) -> np.ndarray:
+        if NUMBA_AVAILABLE and numba_utils:
+            return numba_utils.rgb_to_lab_fast(
+                rgb_image,
+                self.rgb_to_xyz_lut,
+                self.RGB_TO_XYZ,
+                self.D65_WHITE,
+                self.xyz_to_lab_lut,
+            )
+        
         rgb_linear = self.rgb_to_xyz_lut[rgb_image]
-        xyz_image = np.einsum("ij,...j->...i", self.RGB_TO_XYZ, rgb_linear)
+        # Optimization: Use matmul instead of einsum
+        rgb_flat = rgb_linear.reshape(-1, 3)
+        xyz_flat = rgb_flat @ self.RGB_TO_XYZ.T
+        xyz_image = xyz_flat.reshape(rgb_linear.shape)
         xyz_norm = xyz_image / self.D65_WHITE
         xyz_norm_clamped = np.clip(xyz_norm, 0.0, 1.0)
         f_xyz_indices = (xyz_norm_clamped * (len(self.xyz_to_lab_lut) - 1)).astype(int)
@@ -148,6 +168,15 @@ class LABColorspace(AbstractColorspace):
 
     def from_colorspace(self, color_image: np.ndarray) -> np.ndarray:
         L, a, b = color_image[..., 0], color_image[..., 1], color_image[..., 2]
+        
+        if NUMBA_AVAILABLE and numba_utils:
+            return numba_utils.lab_to_rgb_fast(
+                L, a, b,
+                self.D65_WHITE,
+                self.XYZ_TO_RGB,
+                (color_image.shape[0], color_image.shape[1])
+            )
+
         fy = (L + 16.0) / 116.0
         fx = a / 500.0 + fy
         fz = fy - b / 200.0
@@ -159,7 +188,10 @@ class LABColorspace(AbstractColorspace):
         xyz_image = (
             np.stack([inv_f(fx), inv_f(fy), inv_f(fz)], axis=-1) * self.D65_WHITE
         )
-        rgb_linear = np.einsum("ij,...j->...i", self.XYZ_TO_RGB, xyz_image)
+        # Optimization: Use matmul instead of einsum
+        xyz_flat = xyz_image.reshape(-1, 3)
+        rgb_flat = xyz_flat @ self.XYZ_TO_RGB.T
+        rgb_linear = rgb_flat.reshape(xyz_image.shape)
         rgb_linear_norm = np.clip(rgb_linear / 100.0, 0.0, 1.0)
         rgb_srgb = np.where(
             rgb_linear_norm <= 0.0031308,

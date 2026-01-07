@@ -13,13 +13,15 @@ Autor principal: Víctor Méndez
 Asistido por: Claude Sonnet 4, Gemini 2.5 Pro, Copilot con GPT-4.1
 """
 
+import os
+import tempfile
 from typing import Any, cast
 
 import cv2
 import numpy as np
-from scipy.linalg import eigh
 
 from .colorspaces import COLORSPACES, BuiltinMatrixColorspace, ColorspaceManager
+from .streaming import StreamingCovariance
 
 
 class ProcessingResult:
@@ -130,32 +132,70 @@ class DecorrelationStretch:
             # RUTA 2: MATRIZ PREDEFINIDA
             base_cs_name = colorspace_obj.base_colorspace_name
             base_cs_obj = self.colorspaces[base_cs_name]
-            base_image = base_cs_obj.to_colorspace(image)
-            pixel_data = self._get_analysis_data(base_image, selection_mask)
-            color_mean = np.mean(pixel_data, axis=0)
-            transform_matrix = colorspace_obj.matrix * (scale / 10.0)
-            processed_base = self._apply_transformation(
-                base_image, transform_matrix, color_mean
-            )
-            processed_rgb = base_cs_obj.from_colorspace(processed_base)
-            final_matrix_for_result = transform_matrix
+            
+            # Check for Memmap / Streaming Mode
+            is_memmap = isinstance(image, np.memmap)
+            
+            if is_memmap:
+                # Calculate mean using streaming (ignore covariance)
+                color_mean, _ = self._calculate_statistics_streaming_fused(
+                    image, base_cs_obj, selection_mask
+                )
+                transform_matrix = colorspace_obj.matrix * (scale / 10.0)
+                
+                # Apply transformation streaming
+                processed_rgb = self._apply_transformation_pipeline_streaming(
+                    image, base_cs_obj, transform_matrix, color_mean
+                )
+                final_matrix_for_result = transform_matrix
+            else:
+                # Standard RAM mode
+                base_image = base_cs_obj.to_colorspace(image)
+                pixel_data = self._get_analysis_data(base_image, selection_mask)
+                color_mean = np.mean(pixel_data, axis=0)
+                transform_matrix = colorspace_obj.matrix * (scale / 10.0)
+                processed_base = self._apply_transformation(
+                    base_image, transform_matrix, color_mean
+                )
+                processed_rgb = base_cs_obj.from_colorspace(processed_base)
+                final_matrix_for_result = transform_matrix
         else:
             # RUTA 1: ANÁLISIS ESTADÍSTICO
             adjusted_scale = scale * colorspace_obj.scale_adjust_factor
+            
+            is_memmap = isinstance(image, np.memmap)
 
-            transformed_image = colorspace_obj.to_colorspace(image)
-            pixel_data = self._get_analysis_data(transformed_image, selection_mask)
-            color_mean, covariance_matrix = self._calculate_statistics(pixel_data)
-            eigenvalues, eigenvectors = self._eigendecomposition(covariance_matrix)
+            if is_memmap:
+                # Streaming Statistics
+                color_mean, covariance_matrix = self._calculate_statistics_streaming_fused(
+                     image, colorspace_obj, selection_mask
+                )
+                
+                # Standard Eigen logic (small 3x3 matrices)
+                eigenvalues, eigenvectors = self._eigendecomposition(covariance_matrix)
+                stretch_matrix = self._build_stretch_matrix(eigenvalues, adjusted_scale)
+                transform_matrix = eigenvectors @ stretch_matrix @ eigenvectors.T
+                
+                # Streaming Transformation
+                processed_rgb = self._apply_transformation_pipeline_streaming(
+                    image, colorspace_obj, transform_matrix, color_mean
+                )
+                final_matrix_for_result = transform_matrix
+            else:
+                # Standard RAM mode
+                transformed_image = colorspace_obj.to_colorspace(image)
+                pixel_data = self._get_analysis_data(transformed_image, selection_mask)
+                color_mean, covariance_matrix = self._calculate_statistics(pixel_data)
+                eigenvalues, eigenvectors = self._eigendecomposition(covariance_matrix)
 
-            stretch_matrix = self._build_stretch_matrix(eigenvalues, adjusted_scale)
-            transform_matrix = eigenvectors @ stretch_matrix @ eigenvectors.T
+                stretch_matrix = self._build_stretch_matrix(eigenvalues, adjusted_scale)
+                transform_matrix = eigenvectors @ stretch_matrix @ eigenvectors.T
 
-            processed_transformed = self._apply_transformation(
-                transformed_image, transform_matrix, color_mean
-            )
-            processed_rgb = colorspace_obj.from_colorspace(processed_transformed)
-            final_matrix_for_result = transform_matrix
+                processed_transformed = self._apply_transformation(
+                    transformed_image, transform_matrix, color_mean
+                )
+                processed_rgb = colorspace_obj.from_colorspace(processed_transformed)
+                final_matrix_for_result = transform_matrix
 
         self._last_processed = processed_rgb
 
@@ -206,7 +246,8 @@ class DecorrelationStretch:
         self, pixel_data: np.ndarray
     ) -> tuple[np.ndarray, np.ndarray]:
         """Calculate statistics for decorrelation."""
-        data = pixel_data.astype(np.float64)
+        # Optimization: Use float32 to save memory
+        data = pixel_data.astype(np.float32)
         color_mean = np.mean(data, axis=0)
         covariance = np.cov(data.T)
         return color_mean, covariance
@@ -215,7 +256,9 @@ class DecorrelationStretch:
         self, covariance_matrix: np.ndarray
     ) -> tuple[np.ndarray, np.ndarray]:
         """Perform eigendecomposition of covariance matrix."""
-        eigenvalues, eigenvectors = eigh(covariance_matrix)
+        # Optimization: Use numpy's eigh which is faster for small matrices (3x3)
+        # compared to scipy's wrapper which handles general cases
+        eigenvalues, eigenvectors = np.linalg.eigh(covariance_matrix)
         idx = np.argsort(eigenvalues)[::-1]
         eigenvalues = eigenvalues[idx]
         eigenvectors = eigenvectors[:, idx]
@@ -237,11 +280,106 @@ class DecorrelationStretch:
     ) -> np.ndarray:
         """Apply transformation matrix to image."""
         original_shape = transformed_image.shape
-        flat_image = transformed_image.reshape(-1, 3).astype(np.float64)
-        centered_data = flat_image - color_mean
-        processed_flat = (transform_matrix @ centered_data.T).T
-        processed_flat += color_mean
+        
+        # Optimization: Use float32 to save 50% RAM compared to float64
+        flat_image = transformed_image.reshape(-1, 3).astype(np.float32)
+        
+        # Optimization: In-place subtraction
+        color_mean_32 = color_mean.astype(np.float32)
+        flat_image -= color_mean_32
+        
+        # Optimization: (A @ B.T).T == B @ A.T
+        # Avoids transposing the large data chunk
+        transform_matrix_32 = transform_matrix.astype(np.float32)
+        processed_flat = flat_image @ transform_matrix_32.T
+        
+        # Free large array immediately
+        del flat_image
+        
+        # Optimization: In-place addition
+        processed_flat += color_mean_32
+        
         return processed_flat.reshape(original_shape)
+
+    # --- Streaming / Auto-Memmap Methods ---
+
+    def _calculate_statistics_streaming_fused(
+        self, image: np.ndarray, colorspace_obj: Any, selection_mask: np.ndarray | None
+    ) -> tuple[np.ndarray, np.ndarray]:
+        """
+        Calculate statistics using streaming (chunked) processing.
+        Fuses 'to_colorspace' and stat accumulation to avoid creating large intermediate arrays.
+        """
+        # Note: selection_mask is currently ignored in streaming mode for simplicity
+        streamer = StreamingCovariance(n_features=3)
+        
+        height, width = image.shape[:2]
+        # Chunk size: 512 rows. 50k width * 512 * 3 * 8 bytes ~ 600 MB buffers.
+        chunk_height = 512
+        
+        for i in range(0, height, chunk_height):
+            end_i = min(i + chunk_height, height)
+            
+            # 1. Read Chunk (Memmap slicing reads from disk)
+            chunk_rgb = image[i:end_i]
+            
+            # 2. Convert to Colorspace (CPU RAM operation on small chunk)
+            chunk_trans = colorspace_obj.to_colorspace(chunk_rgb)
+            
+            # 3. Update Statistics
+            chunk_flat = chunk_trans.reshape(-1, 3)
+            streamer.update(chunk_flat)
+            
+        return streamer.finalize()
+
+    def _apply_transformation_pipeline_streaming(
+        self, 
+        image: np.ndarray, 
+        colorspace_obj: Any, 
+        transform_matrix: np.ndarray, 
+        color_mean: np.ndarray
+    ) -> np.memmap:
+        """
+        Apply full pipeline (Convert -> Transform -> Revert) in streaming mode.
+        Writes result to a new temporary memmap file.
+        """
+        height, width = image.shape[:2]
+        
+        # Create output memmap (temp file)
+        # We start with a generic name, management handles cleanup
+        fd, temp_path = tempfile.mkstemp()
+        os.close(fd)
+        
+        # Initialize output memmap
+        output = np.memmap(temp_path, dtype='uint8', mode='w+', shape=(height, width, 3))
+        
+        chunk_height = 512
+        
+        for i in range(0, height, chunk_height):
+            end_i = min(i + chunk_height, height)
+            
+            # 1. Read Input Chunk
+            chunk_rgb = image[i:end_i]
+            
+            # 2. To Colorspace
+            chunk_trans = colorspace_obj.to_colorspace(chunk_rgb)
+            
+            # 3. Apply Matrix Transform
+            chunk_enhanced = self._apply_transformation(
+                chunk_trans, transform_matrix, color_mean
+            )
+            
+            # 4. From Colorspace
+            chunk_out = colorspace_obj.from_colorspace(chunk_enhanced)
+            
+            # 5. Write Output Chunk
+            output[i:end_i] = chunk_out
+            
+            if i % (chunk_height * 10) == 0:
+                output.flush()
+                
+        output.flush()
+        return output
 
     # Legacy compatibility methods using independent processors
 

@@ -16,6 +16,8 @@ __author__ = (
 
 # Core decorrelation algorithm (legacy)
 # Core decorrelation algorithm (legacy)
+import cv2
+
 from .decorrelation import DecorrelationStretch as DecorrelationStretch
 from .decorrelation import ProcessingResult as ProcessingResult
 
@@ -122,6 +124,10 @@ try:
     GUI_AVAILABLE = True
 except ImportError:
     GUI_AVAILABLE = False
+
+
+# Enable OpenCV SIMD optimizations (AVX/SSE)
+cv2.setUseOptimized(True)
 
 
 # Helper functions
@@ -273,3 +279,5 @@ __all__ = [
     # Legacy compatibility
     "create_decorrelation_stretch",
 ]
+
+

@@ -18,7 +18,6 @@ from enum import Enum
 import cv2
 import numpy as np
 from scipy import ndimage
-from scipy.ndimage import gaussian_filter
 
 
 class FlattenMethod(Enum):
@@ -119,16 +118,17 @@ class FlattenProcessor:
 
             # Large structure removal (background estimation)
             if params.filter_large > 0:
-                large_gaussian = gaussian_filter(
-                    channel_data, sigma=params.filter_large
+                # Optimization: Use OpenCV GaussianBlur (SIMD optimized) instead of scipy
+                large_gaussian = cv2.GaussianBlur(
+                    channel_data, (0, 0), sigmaX=params.filter_large
                 )
             else:
                 large_gaussian = np.zeros_like(channel_data)
 
             # Small structure preservation
             if params.filter_small > 0:
-                small_gaussian = gaussian_filter(
-                    channel_data, sigma=params.filter_small
+                small_gaussian = cv2.GaussianBlur(
+                    channel_data, (0, 0), sigmaX=params.filter_small
                 )
             else:
                 small_gaussian = channel_data.copy()
@@ -173,7 +173,9 @@ class FlattenProcessor:
             channel_data = image[:, :, channel]
 
             # Estimate background using large Gaussian
-            bg_estimate = gaussian_filter(channel_data, sigma=params.filter_large)
+            bg_estimate = cv2.GaussianBlur(
+                channel_data, (0, 0), sigmaX=params.filter_large
+            )
             background[:, :, channel] = bg_estimate
 
             # Subtract background, preserve mean

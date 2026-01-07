@@ -12,6 +12,8 @@ DStretch Python permite revelar pigmentos y detalles invisibles en fotografías 
 
 - **Replicación exacta** del algoritmo DStretch ImageJ (validación >99.97% SSIM)
 - **23 espacios de color** (YDS, CRGB, LRE, LAB, RGB, etc.)
+- **Soporte para Imágenes Masivas**: Procesamiento "Auto-Memmap" inteligente.
+- **Nueva Interfaz "Premium"**: GUI moderna con tema oscuro (CustomTkinter).
 - **Interfaces CLI y GUI** multiplataforma (Windows, macOS, Linux)
 - **API de Python** para scripting y procesamiento por lotes.
 - **Optimización para imágenes grandes** con uso eficiente de memoria.
@@ -199,7 +201,7 @@ Si utilizas DStretch Python en trabajos académicos, por favor cita el software 
 
 Formato de cita sugerido (APA 7 para software):
 
-> Méndez, V. (2025). *DStretch Python* (Version 0.4.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.17172811
+> Méndez, V. (2025). *DStretch Python* (Version 0.5.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.17172811
 
 ### Autores y Agradecimientos
 

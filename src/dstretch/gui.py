@@ -20,6 +20,12 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
+import customtkinter as ctk
+
+# Configure CustomTkinter for premium look
+ctk.set_appearance_mode("Dark")
+ctk.set_default_color_theme("blue") 
+
 import cv2
 import numpy as np
 from PIL import Image, ImageTk
@@ -74,7 +80,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class AdvancedSettingsWindow(tk.Toplevel):
+class AdvancedSettingsWindow(ctk.CTkToplevel):
     """A Toplevel window for advanced preprocessing settings."""
 
     def __init__(self, parent, app):
@@ -82,6 +88,7 @@ class AdvancedSettingsWindow(tk.Toplevel):
         self.transient(parent)
         self.grab_set()
         self.title("Advanced Preprocessing & Custom Pipeline")
+        self.geometry("500x750")
         self.app = app
 
         self.vars = {
@@ -118,82 +125,48 @@ class AdvancedSettingsWindow(tk.Toplevel):
         self.wait_window(self)
 
     def _setup_ui(self):
-        main_frame = ttk.Frame(self, padding=10)
-        main_frame.pack(fill=tk.BOTH, expand=True)
+        main_frame = ctk.CTkFrame(self)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
 
-        basic_frame = ttk.LabelFrame(main_frame, text="Enable Processors", padding=5)
+        # Basic Processors
+        ctk.CTkLabel(main_frame, text="Enable Processors", font=("Roboto", 16, "bold")).pack(anchor=tk.W, pady=(10, 5))
+        basic_frame = ctk.CTkFrame(main_frame)
         basic_frame.pack(fill=tk.X, pady=5)
-        ttk.Checkbutton(basic_frame, text="Invert", variable=self.vars["invert"]).pack(
-            anchor=tk.W
-        )
-        ttk.Checkbutton(
-            basic_frame, text="Auto Contrast", variable=self.vars["auto_contrast"]
-        ).pack(anchor=tk.W)
-        ttk.Checkbutton(
-            basic_frame, text="Color Balance", variable=self.vars["color_balance"]
-        ).pack(anchor=tk.W)
-        ttk.Checkbutton(
-            basic_frame, text="Flatten Illumination", variable=self.vars["flatten"]
-        ).pack(anchor=tk.W)
+        
+        ctk.CTkCheckBox(basic_frame, text="Invert", variable=self.vars["invert"]).pack(anchor=tk.W, padx=10, pady=5)
+        ctk.CTkCheckBox(basic_frame, text="Auto Contrast", variable=self.vars["auto_contrast"]).pack(anchor=tk.W, padx=10, pady=5)
+        ctk.CTkCheckBox(basic_frame, text="Color Balance", variable=self.vars["color_balance"]).pack(anchor=tk.W, padx=10, pady=5)
+        ctk.CTkCheckBox(basic_frame, text="Flatten Illumination", variable=self.vars["flatten"]).pack(anchor=tk.W, padx=10, pady=5)
 
-        adv_frame = ttk.LabelFrame(main_frame, text="Advanced Options", padding=5)
+        # Advanced Options
+        ctk.CTkLabel(main_frame, text="Advanced Options", font=("Roboto", 16, "bold")).pack(anchor=tk.W, pady=(20, 5))
+        adv_frame = ctk.CTkFrame(main_frame)
         adv_frame.pack(fill=tk.X, pady=5)
 
-        ttk.Label(adv_frame, text="Contrast Clip %:").pack(anchor=tk.W)
-        ttk.Scale(
-            adv_frame,
-            from_=0.0,
-            to=5.0,
-            variable=self.vars["contrast_clip"],
-            orient=tk.HORIZONTAL,
-        ).pack(fill=tk.X, padx=5, pady=(0, 5))
-        ttk.Label(adv_frame, text="Balance Method:").pack(anchor=tk.W)
-        ttk.Combobox(
-            adv_frame,
-            textvariable=self.vars["balance_method"],
-            values=["gray_world"],
-            state="readonly",
-        ).pack(fill=tk.X, padx=5)
-        ttk.Label(adv_frame, text="Balance Strength:").pack(anchor=tk.W)
-        ttk.Scale(
-            adv_frame,
-            from_=0.1,
-            to=2.0,
-            variable=self.vars["balance_strength"],
-            orient=tk.HORIZONTAL,
-        ).pack(fill=tk.X, padx=5, pady=(0, 5))
-        ttk.Label(adv_frame, text="Flatten Method:").pack(anchor=tk.W)
-        ttk.Combobox(
-            adv_frame,
-            textvariable=self.vars["flatten_method"],
-            values=["gaussian"],
-            state="readonly",
-        ).pack(fill=tk.X, padx=5)
-        ttk.Label(adv_frame, text="Large Structures (Blur Size):").pack(anchor=tk.W)
-        ttk.Scale(
-            adv_frame,
-            from_=10.0,
-            to=200.0,
-            variable=self.vars["flatten_large"],
-            orient=tk.HORIZONTAL,
-        ).pack(fill=tk.X, padx=5)
-        ttk.Label(adv_frame, text="Small Structures (Detail):").pack(anchor=tk.W)
-        ttk.Scale(
-            adv_frame,
-            from_=1.0,
-            to=10.0,
-            variable=self.vars["flatten_small"],
-            orient=tk.HORIZONTAL,
-        ).pack(fill=tk.X, padx=5, pady=(0, 5))
+        ctk.CTkLabel(adv_frame, text="Contrast Clip %:").pack(anchor=tk.W, padx=10, pady=(10, 0))
+        ctk.CTkSlider(adv_frame, from_=0.0, to=5.0, variable=self.vars["contrast_clip"]).pack(fill=tk.X, padx=10, pady=5)
+        
+        ctk.CTkLabel(adv_frame, text="Balance Method:").pack(anchor=tk.W, padx=10)
+        ctk.CTkOptionMenu(adv_frame, variable=self.vars["balance_method"], values=["gray_world", "white_patch", "manual"]).pack(fill=tk.X, padx=10, pady=5)
+        
+        ctk.CTkLabel(adv_frame, text="Balance Strength:").pack(anchor=tk.W, padx=10)
+        ctk.CTkSlider(adv_frame, from_=0.1, to=2.0, variable=self.vars["balance_strength"]).pack(fill=tk.X, padx=10, pady=5)
+        
+        ctk.CTkLabel(adv_frame, text="Flatten Method:").pack(anchor=tk.W, padx=10)
+        ctk.CTkOptionMenu(adv_frame, variable=self.vars["flatten_method"], values=["gaussian", "rolling_ball"]).pack(fill=tk.X, padx=10, pady=5)
+        
+        ctk.CTkLabel(adv_frame, text="Large Structures (Blur):").pack(anchor=tk.W, padx=10)
+        ctk.CTkSlider(adv_frame, from_=10.0, to=200.0, variable=self.vars["flatten_large"]).pack(fill=tk.X, padx=10, pady=5)
+        
+        ctk.CTkLabel(adv_frame, text="Small Structures (Detail):").pack(anchor=tk.W, padx=10)
+        ctk.CTkSlider(adv_frame, from_=1.0, to=10.0, variable=self.vars["flatten_small"]).pack(fill=tk.X, padx=10, pady=(5, 15))
 
-        button_frame = ttk.Frame(main_frame)
-        button_frame.pack(fill=tk.X, pady=(10, 0))
-        ttk.Button(button_frame, text="Apply", command=self._apply_changes).pack(
-            side=tk.RIGHT, padx=5
-        )
-        ttk.Button(button_frame, text="Cancel", command=self._cancel).pack(
-            side=tk.RIGHT
-        )
+        # Buttons
+        button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+        button_frame.pack(fill=tk.X, pady=(20, 0))
+        
+        ctk.CTkButton(button_frame, text="Apply Changes", command=self._apply_changes).pack(side=tk.RIGHT, padx=5)
+        ctk.CTkButton(button_frame, text="Cancel", fg_color="transparent", border_width=2, command=self._cancel).pack(side=tk.RIGHT, padx=5)
 
     def _apply_changes(self):
         self.app.active_processors.clear()
@@ -219,7 +192,11 @@ class AdvancedSettingsWindow(tk.Toplevel):
 
 class MemoryOptimizedImageCanvas(tk.Canvas):
     def __init__(self, parent, **kwargs):
-        super().__init__(parent, bg="gray90", relief="sunken", bd=1, **kwargs)
+        # Dark background for premium look, remove borders
+        if "bg" not in kwargs:
+            kwargs["bg"] = "#2b2b2b"
+            
+        super().__init__(parent, relief="flat", bd=0, highlightthickness=0, **kwargs)
         self.full_res_image = None
         self.display_image_tk = None
         self.imscale = 1.0
@@ -235,10 +212,28 @@ class MemoryOptimizedImageCanvas(tk.Canvas):
         self.bind("<Double-1>", self.fit_to_screen)
 
     def set_image(self, image_np: np.ndarray):
+        # Detect Memmap or Array
+        # If memmap, we might want to check size before converting to uint8 full array?
+        # But for display, we MUST load it to RAM (downsampled).
+        # We can implement a downsample_for_display in generic utils?
+        # For now, assuming image_np fits in RAM or this canvas will crash.
+        # But wait, we implemented streaming because image doesn't fit in RAM.
+        # So we CANNOT just do image_np.astype(np.uint8) if valid image is huge.
+        
+        # Optimization: if huge, subsample immediately
+        if isinstance(image_np, np.memmap) or image_np.size > 100_000_000: # >100MB
+             # Subsample
+             step = int(max(image_np.shape[0], image_np.shape[1]) / 2000)
+             if step < 1: step = 1
+             # Slice: image_np[::step, ::step]
+             display_data = image_np[::step, ::step].copy()
+        else:
+             display_data = image_np
+
         self.full_res_image = (
-            np.clip(image_np, 0, 255).astype(np.uint8)
-            if image_np.dtype != np.uint8
-            else image_np
+            np.clip(display_data, 0, 255).astype(np.uint8)
+            if display_data.dtype != np.uint8
+            else display_data
         )
         self.fit_to_screen()
 
@@ -294,7 +289,9 @@ class MemoryOptimizedImageCanvas(tk.Canvas):
         if dw <= 0 or dh <= 0:
             self.delete("all")
             return
-        resized = cv2.resize(cropped, (dw, dh), interpolation=cv2.INTER_AREA)
+        
+        # Basic visual interpolation
+        resized = cv2.resize(cropped, (dw, dh), interpolation=cv2.INTER_NEAREST)
         self.display_image_tk = ImageTk.PhotoImage(Image.fromarray(resized))
         self.delete("all")
         self.create_image(
@@ -307,27 +304,26 @@ class MemoryOptimizedImageCanvas(tk.Canvas):
 
 class DStretchGUI:
     def __init__(self):
-        self.root = tk.Tk()
-        self.root.title("DStretch Python v3.5 - Advanced UI")
+        self.root = ctk.CTk()
+        self.root.title("DStretch Python v4.0 - Premium Edition")
+        
+        # Maximize or Set Size
         screen_width = self.root.winfo_screenwidth()
-        if screen_width < 1366:
-            w, h = 1000, 700
-        elif screen_width < 1920:
-            w, h = 1200, 800
-        else:
-            w, h = 1400, 900
+        w = min(1600, int(screen_width * 0.9))
+        h = int(w * 0.6)
         self.root.geometry(f"{w}x{h}")
+
         self.dstretch = DecorrelationStretch() if DecorrelationStretch else None
-        self.original_image, self.preprocessed_image, self.processed_image = (
-            None,
-            None,
-            None,
-        )
+        self.original_image = None
+        self.preprocessed_image = None
+        self.processed_image = None
         self.original_dimensions = None
+        
         self.current_colorspace = "YDS"
         self.active_processors = set()
         self.advanced_settings = self._get_default_advanced_settings()
 
+        # Processor Logic (same as before)
         self.processors = {
             "invert": lambda img: 255 - img,
             "auto_contrast": lambda img: self._apply_auto_contrast(
@@ -342,8 +338,7 @@ class DStretchGUI:
             "hue_shift": self._apply_hue_shift,
         }
 
-        self.status_var = tk.StringVar(value="Ready")
-        self._setup_styles()
+        self.status_var = tk.StringVar(value="Ready. Load an image to start.")
         self._setup_ui()
         logger.info("DStretch GUI initialized successfully")
 
@@ -357,124 +352,125 @@ class DStretchGUI:
             "flatten_small": 3.0,
         }
 
-    def _setup_styles(self):
-        style = ttk.Style()
-        try:
-            style.configure(
-                "Selected.TButton",
-                background="#0078d4",
-                foreground="white",
-                font=("TkDefaultFont", 9, "bold"),
-            )
-            style.configure("Active.TButton", background="#28a745", foreground="white")
-        except tk.TclError:
-            pass
+    # Removed _setup_styles (CTk handles styles/themes)
 
     def _setup_ui(self):
-        main_paned = ttk.PanedWindow(self.root, orient=tk.HORIZONTAL)
-        main_paned.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        self.image_frame = ttk.Frame(main_paned)
-        main_paned.add(self.image_frame, weight=70)
+        # Main layout using Grid
+        self.root.columnconfigure(0, weight=1)
+        self.root.rowconfigure(0, weight=1)
+        
+        main_container = ctk.CTkFrame(self.root)
+        main_container.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+        
+        main_container.columnconfigure(0, weight=5) # Image area
+        main_container.columnconfigure(1, weight=1) # sidebar
+        main_container.rowconfigure(0, weight=1) # full height
+        
+        # 1. Image Frame (Left)
+        self.image_frame = ctk.CTkFrame(main_container, fg_color="transparent")
+        self.image_frame.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
+        
         self.canvas = MemoryOptimizedImageCanvas(self.image_frame)
         self.canvas.pack(fill=tk.BOTH, expand=True)
-        self.controls_frame = ttk.Frame(main_paned)
-        main_paned.add(self.controls_frame, weight=30)
+
+        # 2. Controls Frame (Right)
+        self.controls_frame = ctk.CTkFrame(main_container, corner_radius=10)
+        self.controls_frame.grid(row=0, column=1, sticky="nsew")
+        
         self._setup_standard_mode()
-        self.status_label = ttk.Label(
-            self.root, textvariable=self.status_var, relief="sunken", anchor="w"
-        )
-        self.status_label.pack(side=tk.BOTTOM, fill=tk.X)
+        
+        # 3. Status Bar (Bottom)
+        self.status_label = ctk.CTkLabel(self.root, textvariable=self.status_var, anchor="w", text_color="gray70", height=20)
+        self.status_label.grid(row=1, column=0, sticky="ew", padx=15, pady=2)
 
     def _setup_standard_mode(self):
+        # Clear
         for widget in self.controls_frame.winfo_children():
             widget.destroy()
-        file_frame = ttk.Frame(self.controls_frame)
-        file_frame.pack(fill=tk.X, pady=(0, 10))
-        ttk.Button(file_frame, text="Open image", command=self._open_image).pack(
-            side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 2)
-        )
-        ttk.Button(
-            file_frame, text="Restore\noriginal", command=self._restore_original
-        ).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 2))
-        ttk.Button(file_frame, text="Save result", command=self._save_result).pack(
-            side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 0)
-        )
 
-        preprocess_frame = ttk.LabelFrame(
-            self.controls_frame, text="Preprocessing", padding=5
-        )
-        preprocess_frame.pack(fill=tk.X, pady=(0, 10))
-        preprocess_row1 = ttk.Frame(preprocess_frame)
-        preprocess_row1.pack(fill=tk.X, pady=2)
+        # Title
+        ctk.CTkLabel(self.controls_frame, text="Control Panel", font=("Roboto", 18, "bold")).pack(pady=(15, 10))
+
+        # File Actions
+        file_frame = ctk.CTkFrame(self.controls_frame, fg_color="transparent")
+        file_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        ctk.CTkButton(file_frame, text="Open Image", command=self._open_image, fg_color="#2da43e", hover_color="#2c974b").pack(fill=tk.X, pady=2)
+        # Using pack side=left for next two?
+        row_svc = ctk.CTkFrame(file_frame, fg_color="transparent")
+        row_svc.pack(fill=tk.X, pady=2)
+        ctk.CTkButton(row_svc, text="Original", width=80, command=self._restore_original, fg_color="#666666").pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(0,2))
+        ctk.CTkButton(row_svc, text="Save", width=80, command=self._save_result).pack(side=tk.LEFT, expand=True, fill=tk.X, padx=(2,0))
+
+        # Separator
+        ttk.Separator(self.controls_frame).pack(fill=tk.X, padx=10, pady=10)
+
+        # Preprocessing
+        ctk.CTkLabel(self.controls_frame, text="Preprocessing", font=("Roboto", 14, "bold")).pack(anchor="w", padx=10)
+        
+        prep_frame = ctk.CTkFrame(self.controls_frame, fg_color="transparent")
+        prep_frame.pack(fill=tk.X, padx=5, pady=5)
+        
         self.preprocess_buttons = {}
-        buttons1 = {
-            "invert": "Invert",
-            "auto_contrast": "Auto\ncontrast",
-            "color_balance": "Color\nbalance",
-            "flatten": "Flatten",
-        }
-        for name, text in buttons1.items():
-            self.preprocess_buttons[name] = ttk.Button(
-                preprocess_row1,
-                text=text,
-                command=lambda n=name: self._toggle_preprocessing(n),
+        # Grid layout for toggles
+        toggles = [
+            ("invert", "Invert"), ("auto_contrast", "Contrast"),
+            ("color_balance", "Balance"), ("flatten", "Flatten")
+        ]
+        for i, (key, text) in enumerate(toggles):
+            btn = ctk.CTkButton(
+                prep_frame, 
+                text=text, 
+                width=60, 
+                height=30,
+                border_width=1,
+                fg_color="transparent", 
+                text_color=("gray10", "gray90"),
+                command=lambda n=key: self._toggle_preprocessing(n)
             )
-            self.preprocess_buttons[name].pack(
-                side=tk.LEFT, fill=tk.X, expand=True, padx=2
-            )
+            btn.grid(row=i//2, column=i%2, padx=2, pady=2, sticky="ew")
+            self.preprocess_buttons[key] = btn
+            
+        prep_frame.columnconfigure(0, weight=1); prep_frame.columnconfigure(1, weight=1)
+        
+        # Tools row
+        tools_frame = ctk.CTkFrame(self.controls_frame, fg_color="transparent")
+        tools_frame.pack(fill=tk.X, padx=5, pady=5)
+        ctk.CTkButton(tools_frame, text="Hue Shift", width=80, command=lambda: self._toggle_preprocessing("hue_shift"), fg_color="transparent", border_width=1).pack(side=tk.LEFT, expand=True, padx=2)
+        ctk.CTkButton(tools_frame, text="Quick Fix", width=80, command=self._apply_quick_enhance, fg_color="#8957e5").pack(side=tk.LEFT, expand=True, padx=2)
+        
+        ctk.CTkButton(self.controls_frame, text="Advanced Settings", command=self._open_advanced_window, fg_color="transparent", border_width=1).pack(fill=tk.X, padx=10, pady=5)
 
-        preprocess_row2 = ttk.Frame(preprocess_frame)
-        preprocess_row2.pack(fill=tk.X, pady=2)
-        btn_hue = ttk.Button(
-            preprocess_row2,
-            text="Hue Shift",
-            command=lambda: self._toggle_preprocessing("hue_shift"),
-        )
-        btn_hue.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=2)
-        btn_qen = ttk.Button(
-            preprocess_row2, text="Quick\nEnhance", command=self._apply_quick_enhance
-        )
-        btn_qen.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=2)
-        btn_adv = ttk.Button(
-            preprocess_row2, text="ADVANCED", command=self._open_advanced_window
-        )
-        btn_adv.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=2)
-        self.preprocess_buttons["hue_shift"] = btn_hue
+        # Separator
+        ttk.Separator(self.controls_frame).pack(fill=tk.X, padx=10, pady=10)
 
-        colorspace_frame = ttk.LabelFrame(
-            self.controls_frame, text="Color Spaces", padding=5
-        )
-        colorspace_frame.pack(fill=tk.X, pady=(0, 10))
-        self._setup_colorspace_grid(colorspace_frame)
+        # Color Spaces
+        ctk.CTkLabel(self.controls_frame, text="Color Spaces", font=("Roboto", 14, "bold")).pack(anchor="w", padx=10)
+        cs_frame = ctk.CTkFrame(self.controls_frame)
+        cs_frame.pack(fill=tk.X, padx=10, pady=5)
+        self._setup_colorspace_grid(cs_frame)
 
-        scale_frame = ttk.LabelFrame(self.controls_frame, text="Scale:", padding=5)
-        scale_frame.pack(fill=tk.X, pady=(0, 10))
-        scale_control_frame = ttk.Frame(scale_frame)
-        scale_control_frame.pack(fill=tk.X)
+        # Scale
+        scale_frame = ctk.CTkFrame(self.controls_frame, fg_color="transparent")
+        scale_frame.pack(fill=tk.X, padx=10, pady=(15, 5))
+        ctk.CTkLabel(scale_frame, text="Scale:").pack(side=tk.LEFT)
         self.scale_var = tk.DoubleVar(value=15.0)
-        self.scale_slider = ttk.Scale(
-            scale_control_frame,
+        self.scale_label = ctk.CTkLabel(scale_frame, text="15", width=30)
+        self.scale_label.pack(side=tk.RIGHT)
+        
+        self.scale_slider = ctk.CTkSlider(
+            scale_frame,
             from_=1.0,
             to=100.0,
             variable=self.scale_var,
-            orient=tk.HORIZONTAL,
-            command=self._on_scale_changed,
+            command=self._on_scale_changed
         )
-        self.scale_slider.pack(side=tk.LEFT, fill=tk.X, expand=True)
-        self.scale_label = ttk.Label(scale_control_frame, text="15", width=4)
-        self.scale_label.pack(side=tk.RIGHT, padx=(5, 0))
+        self.scale_slider.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
 
-        footer_frame = ttk.Frame(self.controls_frame)
-        footer_frame.pack(fill=tk.X, pady=(10, 0))
-        ttk.Button(footer_frame, text="About", command=self._show_about).pack(
-            side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 2)
-        )
-        ttk.Button(
-            footer_frame, text="Restore\nSettings", command=self._restore_settings
-        ).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 2))
-        ttk.Button(footer_frame, text="EXIT", command=self.root.quit).pack(
-            side=tk.LEFT, fill=tk.X, expand=True, padx=(2, 0)
-        )
+        # Footer
+        footer = ctk.CTkFrame(self.controls_frame, fg_color="transparent")
+        footer.pack(side=tk.BOTTOM, fill=tk.X, pady=10)
+        ctk.CTkButton(footer, text="Exit", command=self.root.quit, fg_color="transparent", border_width=1, text_color="red", hover_color="#550000").pack(fill=tk.X, padx=10)
 
     def _setup_colorspace_grid(self, parent):
         colorspace_layout = [
@@ -497,9 +493,20 @@ class DStretchGUI:
                         if name == "CUSTOM"
                         else lambda n=name: self._select_colorspace(n)
                     )
-                    btn = ttk.Button(parent, text=name, width=8, command=cmd)
+                    # CTkButton for Grid
+                    btn = ctk.CTkButton(
+                        parent, 
+                        text=name, 
+                        width=40, 
+                        height=28,
+                        fg_color="transparent",
+                        border_width=1,
+                        text_color=("gray10", "gray90"),
+                        command=cmd
+                    )
                     btn.grid(row=r, column=c, padx=1, pady=1, sticky="ew")
                     self.colorspace_buttons[name] = btn
+        
         for i in range(4):
             parent.columnconfigure(i, weight=1)
 
@@ -604,46 +611,63 @@ class DStretchGUI:
         self.active_processors.clear()
         for name, button in self.preprocess_buttons.items():
             if name in self.processors:
-                button.configure(style="TButton")
+                button.configure(fg_color=["#3B8ED0", "#1F6AA5"])
 
     def _rebuild_from_advanced_settings(self):
         self._set_status("Applying advanced settings...")
         for name, btn in self.preprocess_buttons.items():
             if name in self.processors:
                 btn.configure(
-                    style="Active.TButton"
+                    fg_color="green" # Active color
                     if name in self.active_processors
-                    else "TButton"
+                    else ["#3B8ED0", "#1F6AA5"] # Default color
                 )
         self._rebuild_current_image()
 
     def _restore_settings(self):
         self.scale_var.set(15.0)
-        self.scale_label.config(text="15")
+        self.scale_label.configure(text="15")
         self.advanced_settings = self._get_default_advanced_settings()
         self._reset_button_states()
         if self.original_image is not None:
-            self.preprocessed_image = self.original_image.copy()
-            self.processed_image = self.original_image.copy()
+            self.preprocessed_image = self.original_image
+            self.processed_image = self.original_image
             self.canvas.set_image(self.original_image)
         self._set_status("Settings restored to defaults")
         gc.collect()
 
+    def _reset_button_states(self):
+        for btn in self.preprocess_buttons.values():
+            btn.configure(fg_color="transparent")
+        for btn in self.colorspace_buttons.values():
+            if btn.cget("text") != "CUSTOM":
+                 btn.configure(fg_color="transparent")
+
     def _show_about(self):
         messagebox.showinfo(
             "About DStretch Python",
-            "DStretch Python v3.5 - Advanced Settings UI\n\n"
+            "DStretch Python v4.0 - Premium Edition\n\n"
             "Features:\n"
-            "• Advanced settings panel for fine-tuned control\n"
-            "• Image Zoom (mousewheel) and Pan (click-drag)\n"
-            "• Functional preprocessing tools\n"
-            "• 23+ specialized color spaces",
+            "• Massive Image Support (Auto-Memmap Streaming)\n"
+            "• Advanced Neural/Algorithmic Enhancement\n"
+            "• Premium Dark UI\n"
+            "• 23+ Specialized Color Spaces",
         )
 
     def _update_rebuilt_result(self, rebuilt_image):
         self.preprocessed_image = rebuilt_image
+        
+        # If streaming/memmap, this might be a handle.
+        # But rebuilt_image usually comes from 'apply_single_processor' which 
+        # for now assumes RAM processing for pre-processors (Invert/Contrast).
+        # TODO: Streaming Preprocessing.
+        # For now, pre-processing huge images is skipped or might crash if not handled.
+        # Subsampling for display is handled in Canvas.
+        
         self.processed_image = rebuilt_image
+        # Canvas handles subsampling
         self.canvas.set_image(self.processed_image)
+        
         active = sorted(list(self.active_processors))
         self._set_status(
             f"Rebuilt with: {' + '.join(active)}" if active else "Restored to original"
@@ -653,28 +677,38 @@ class DStretchGUI:
         if self.original_image is None or not self.dstretch:
             self._set_status("No image loaded")
             return
+        
+        # Determine source
         source = (
             self.preprocessed_image
             if self.preprocessed_image is not None
             else self.original_image
         )
+        
         try:
-            optimized = self._optimize_image_for_processing(source)
-            if optimized is None:
-                return
+            # We skip 'optimize_image_for_processing' (resizing/clipping) logic 
+            # for huge images to keep full res
+            if not isinstance(source, np.memmap):
+                 source = self._optimize_image_for_processing(source)
+            
+            if source is None: return
+
             self._set_status(f"Processing with {self.current_colorspace}...")
 
             def process():
                 try:
                     if self.dstretch:
+                        # process() now handles memmap streaming automatically
                         result = self.dstretch.process(
-                            optimized, self.current_colorspace, self.scale_var.get()
+                            source, self.current_colorspace, self.scale_var.get()
                         )
                         self.root.after(
                             0, self._update_colorspace_result, result.processed_image
                         )
                 except Exception as e:
                     self.root.after(0, self._set_status, f"Error processing: {e}")
+                    import traceback
+                    traceback.print_exc()
                 finally:
                     gc.collect()
 
@@ -694,6 +728,8 @@ class DStretchGUI:
         self._set_status(f"{status} (scale {int(self.scale_var.get())})")
 
     def _open_image(self):
+        from .io_utils import smart_load_image
+        
         filename = filedialog.askopenfilename(
             title="Open Image",
             filetypes=[
@@ -703,27 +739,31 @@ class DStretchGUI:
         )
         if filename:
             try:
-                img = Image.open(filename)
-                # Removed thumbnail resizing
-                # if max(img.size) > 3000: img.thumbnail((3000, 3000), Image.Resampling.LANCZOS)
-                if img.mode != "RGB":
-                    img = img.convert("RGB")
-                self.original_image = np.array(img, dtype=np.uint8)
+                self._set_status("Loading image...")
+                # Use smart loader
+                res = smart_load_image(filename)
+                self.original_image = res.data
                 self.original_dimensions = (
                     self.original_image.shape[0],
                     self.original_image.shape[1],
                 )
-                self.preprocessed_image = self.original_image.copy()
-                self.processed_image = self.original_image.copy()
+                
+                # If memmap, preprocessed is ref to same memmap
+                self.preprocessed_image = self.original_image
+                self.processed_image = self.original_image
+                
                 self.canvas.set_image(self.original_image)
                 self._restore_settings()
+                
+                mem_type = "DISK/STREAMING" if res.is_memmap else "RAM"
                 self._set_status(
-                    f"Loaded: {Path(filename).name} ({self.original_image.shape[1]}x{self.original_image.shape[0]})"
+                    f"Loaded: {Path(filename).name} ({self.original_image.shape[1]}x{self.original_image.shape[0]}) [{mem_type}]"
                 )
-                del img
                 gc.collect()
             except Exception as e:
                 messagebox.showerror("Open Error", f"Could not open image:\n{e}")
+                import traceback
+                traceback.print_exc()
 
     def _restore_original(self):
         if self.original_image is not None:
@@ -765,7 +805,8 @@ class DStretchGUI:
         self.current_colorspace = name
         for n, btn in self.colorspace_buttons.items():
             if n != "CUSTOM":
-                btn.configure(style="Selected.TButton" if n == name else "TButton")
+                # Toggle active/inactive colors
+                btn.configure(fg_color="green" if n == name else ["#3B8ED0", "#1F6AA5"])
         self._apply_current_colorspace_safe()
 
     # --- CORRECTED TOGGLE FUNCTION ---
@@ -783,14 +824,16 @@ class DStretchGUI:
 
         if name in self.active_processors:
             self.active_processors.remove(name)
-            btn.configure(style="TButton")
+            # Inactive color
+            btn.configure(fg_color=["#3B8ED0", "#1F6AA5"])
             self._set_status(f"Disabled {name}")
             self._rebuild_current_image()
         else:
             self.active_processors.add(name)
             try:
-                btn.configure(style="Active.TButton")
-            except tk.TclError:
+                # Active color
+                btn.configure(fg_color="green")
+            except Exception:
                 pass
             self._set_status(f"Enabled {name}")
             self._apply_single_processor(name)
@@ -890,11 +933,13 @@ class DStretchGUI:
         self.active_processors.clear()
         if hasattr(self, "preprocess_buttons"):
             for btn in self.preprocess_buttons.values():
-                btn.configure(style="TButton")
+                # Reset to default theme color
+                btn.configure(fg_color=["#3B8ED0", "#1F6AA5"])
         if hasattr(self, "colorspace_buttons"):
             for n, btn in self.colorspace_buttons.items():
                 if n != "CUSTOM":
-                    btn.configure(style="TButton")
+                    # Reset to default theme color
+                    btn.configure(fg_color=["#3B8ED0", "#1F6AA5"])
         self.current_colorspace = "YDS"
 
     def _set_status(self, message):
