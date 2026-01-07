@@ -58,6 +58,16 @@ O usando pip:
 uv pip install -r requirements
 ```
 
+## Descarga de Ejecutable (Windows)
+
+Para usuarios de **Windows** que prefieren no usar la línea de comandos ni instalar Python, ofrecemos un **ejecutable autot contenido (.exe)**.
+
+1.  Ve a la sección de **[Releases](https://github.com/arqueomendez/dstretch-python/releases)** del repositorio.
+2.  Descarga el archivo `DStretch-GUI-vX.Y.Z.exe` de la última versión.
+3.  Ejecuta el archivo directamente para iniciar la interfaz gráfica (GUI).
+
+Este ejecutable contiene todo lo necesario para funcionar y ofrece la misma experiencia que la versión instalada manualmente.
+
 ## Tutorial en Video 📹
 
 Para una explicación completa y visual del proyecto DStretch Python, incluyendo instalación, uso y ejemplos prácticos, consulta este video tutorial en español:
@@ -189,7 +199,7 @@ Si utilizas DStretch Python en trabajos académicos, por favor cita el software 
 
 Formato de cita sugerido (APA 7 para software):
 
-> Méndez, V. (2025). *DStretch Python* (Version 0.0.2) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.17172811
+> Méndez, V. (2025). *DStretch Python* (Version 0.4.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.17172811
 
 ### Autores y Agradecimientos
 

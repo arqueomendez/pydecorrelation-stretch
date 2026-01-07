@@ -6,7 +6,8 @@ Only the latest major version of `dstretch-python` typically receives security u
 
 | Version | Supported          | Notes                                  |
 | :-----: | :----------------: | :------------------------------------- |
-|  0.2.x  | :white_check_mark: | Current stable release (Active)       |
+|  0.4.x  | :white_check_mark: | Current stable release (Active)       |
+|  0.2.x  |        :x:         | End of Life (EOL)                     |
 | < 0.2.0 |        :x:         | End of Life (EOL) - Upgrade required   |
 
 ## Reporting a Vulnerability
