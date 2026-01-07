@@ -95,7 +95,7 @@ uv run dstretch --list-colorspaces
 
 ### GUI
 ```bash
-dstretch-gui
+uv run dstretch-gui
 # Interfaz gráfica similar a ImageJ DStretch
 ```
 
