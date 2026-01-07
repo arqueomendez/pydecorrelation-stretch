@@ -1,3 +1,10 @@
+## v0.5.0 (2026-01-07)
+
+### Feat
+
+- **build-executable**: build executable
+- Add GitHub Actions workflow for automated releases and a script to build Windows executables.
+
 ## v0.4.0 (2026-01-06)
 
 ### Feat
