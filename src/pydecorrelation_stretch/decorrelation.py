@@ -132,17 +132,17 @@ class DecorrelationStretch:
             # RUTA 2: MATRIZ PREDEFINIDA
             base_cs_name = colorspace_obj.base_colorspace_name
             base_cs_obj = self.colorspaces[base_cs_name]
-            
+
             # Check for Memmap / Streaming Mode
             is_memmap = isinstance(image, np.memmap)
-            
+
             if is_memmap:
                 # Calculate mean using streaming (ignore covariance)
                 color_mean, _ = self._calculate_statistics_streaming_fused(
                     image, base_cs_obj, selection_mask
                 )
                 transform_matrix = colorspace_obj.matrix * (scale / 10.0)
-                
+
                 # Apply transformation streaming
                 processed_rgb = self._apply_transformation_pipeline_streaming(
                     image, base_cs_obj, transform_matrix, color_mean
@@ -162,20 +162,22 @@ class DecorrelationStretch:
         else:
             # RUTA 1: ANÁLISIS ESTADÍSTICO
             adjusted_scale = scale * colorspace_obj.scale_adjust_factor
-            
+
             is_memmap = isinstance(image, np.memmap)
 
             if is_memmap:
                 # Streaming Statistics
-                color_mean, covariance_matrix = self._calculate_statistics_streaming_fused(
-                     image, colorspace_obj, selection_mask
+                color_mean, covariance_matrix = (
+                    self._calculate_statistics_streaming_fused(
+                        image, colorspace_obj, selection_mask
+                    )
                 )
-                
+
                 # Standard Eigen logic (small 3x3 matrices)
                 eigenvalues, eigenvectors = self._eigendecomposition(covariance_matrix)
                 stretch_matrix = self._build_stretch_matrix(eigenvalues, adjusted_scale)
                 transform_matrix = eigenvectors @ stretch_matrix @ eigenvectors.T
-                
+
                 # Streaming Transformation
                 processed_rgb = self._apply_transformation_pipeline_streaming(
                     image, colorspace_obj, transform_matrix, color_mean
@@ -280,25 +282,25 @@ class DecorrelationStretch:
     ) -> np.ndarray:
         """Apply transformation matrix to image."""
         original_shape = transformed_image.shape
-        
+
         # Optimization: Use float32 to save 50% RAM compared to float64
         flat_image = transformed_image.reshape(-1, 3).astype(np.float32)
-        
+
         # Optimization: In-place subtraction
         color_mean_32 = color_mean.astype(np.float32)
         flat_image -= color_mean_32
-        
+
         # Optimization: (A @ B.T).T == B @ A.T
         # Avoids transposing the large data chunk
         transform_matrix_32 = transform_matrix.astype(np.float32)
         processed_flat = flat_image @ transform_matrix_32.T
-        
+
         # Free large array immediately
         del flat_image
-        
+
         # Optimization: In-place addition
         processed_flat += color_mean_32
-        
+
         return processed_flat.reshape(original_shape)
 
     # --- Streaming / Auto-Memmap Methods ---
@@ -312,72 +314,74 @@ class DecorrelationStretch:
         """
         # Note: selection_mask is currently ignored in streaming mode for simplicity
         streamer = StreamingCovariance(n_features=3)
-        
+
         height, width = image.shape[:2]
         # Chunk size: 512 rows. 50k width * 512 * 3 * 8 bytes ~ 600 MB buffers.
         chunk_height = 512
-        
+
         for i in range(0, height, chunk_height):
             end_i = min(i + chunk_height, height)
-            
+
             # 1. Read Chunk (Memmap slicing reads from disk)
             chunk_rgb = image[i:end_i]
-            
+
             # 2. Convert to Colorspace (CPU RAM operation on small chunk)
             chunk_trans = colorspace_obj.to_colorspace(chunk_rgb)
-            
+
             # 3. Update Statistics
             chunk_flat = chunk_trans.reshape(-1, 3)
             streamer.update(chunk_flat)
-            
+
         return streamer.finalize()
 
     def _apply_transformation_pipeline_streaming(
-        self, 
-        image: np.ndarray, 
-        colorspace_obj: Any, 
-        transform_matrix: np.ndarray, 
-        color_mean: np.ndarray
+        self,
+        image: np.ndarray,
+        colorspace_obj: Any,
+        transform_matrix: np.ndarray,
+        color_mean: np.ndarray,
     ) -> np.memmap:
         """
         Apply full pipeline (Convert -> Transform -> Revert) in streaming mode.
         Writes result to a new temporary memmap file.
         """
         height, width = image.shape[:2]
-        
+
         # Create output memmap (temp file)
         # We start with a generic name, management handles cleanup
         fd, temp_path = tempfile.mkstemp()
         os.close(fd)
-        
+
         # Initialize output memmap
-        output = np.memmap(temp_path, dtype='uint8', mode='w+', shape=(height, width, 3))
-        
+        output = np.memmap(
+            temp_path, dtype="uint8", mode="w+", shape=(height, width, 3)
+        )
+
         chunk_height = 512
-        
+
         for i in range(0, height, chunk_height):
             end_i = min(i + chunk_height, height)
-            
+
             # 1. Read Input Chunk
             chunk_rgb = image[i:end_i]
-            
+
             # 2. To Colorspace
             chunk_trans = colorspace_obj.to_colorspace(chunk_rgb)
-            
+
             # 3. Apply Matrix Transform
             chunk_enhanced = self._apply_transformation(
                 chunk_trans, transform_matrix, color_mean
             )
-            
+
             # 4. From Colorspace
             chunk_out = colorspace_obj.from_colorspace(chunk_enhanced)
-            
+
             # 5. Write Output Chunk
             output[i:end_i] = chunk_out
-            
+
             if i % (chunk_height * 10) == 0:
                 output.flush()
-                
+
         output.flush()
         return output
 

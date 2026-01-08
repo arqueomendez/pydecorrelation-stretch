@@ -279,5 +279,3 @@ __all__ = [
     # Legacy compatibility
     "create_decorrelation_stretch",
 ]
-
-

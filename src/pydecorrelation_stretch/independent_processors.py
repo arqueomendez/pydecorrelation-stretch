@@ -198,8 +198,12 @@ class AutoContrastProcessor(BaseProcessor):
             }
 
         # Overall statistics
-        original_contrast = np.std(cast(np.ndarray, cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)))
-        enhanced_contrast = np.std(cast(np.ndarray, cv2.cvtColor(enhanced_image, cv2.COLOR_RGB2GRAY)))
+        original_contrast = np.std(
+            cast(np.ndarray, cv2.cvtColor(image, cv2.COLOR_RGB2GRAY))
+        )
+        enhanced_contrast = np.std(
+            cast(np.ndarray, cv2.cvtColor(enhanced_image, cv2.COLOR_RGB2GRAY))
+        )
 
         stats["overall"] = {
             "contrast_improvement": enhanced_contrast / max(original_contrast, 1e-6),

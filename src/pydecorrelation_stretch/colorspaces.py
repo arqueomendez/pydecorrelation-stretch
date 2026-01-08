@@ -27,6 +27,7 @@ from .exact_matrices import (
 # Try to import numba utils, handle ImportError gracefully if Numba is not active
 try:
     from . import numba_utils
+
     NUMBA_AVAILABLE = True
 except ImportError:
     NUMBA_AVAILABLE = False
@@ -138,7 +139,7 @@ class LABColorspace(AbstractColorspace):
         self.D65_WHITE = D65_ILLUMINANT.astype(np.float32)
         self.RGB_TO_XYZ = RGB_TO_XYZ_MATRIX.astype(np.float32)
         self.XYZ_TO_RGB = XYZ_TO_RGB_MATRIX.astype(np.float32)
-        
+
         self.rgb_to_xyz_lut = build_srgb_to_linear_lut().astype(np.float32)
         self.xyz_to_lab_lut = build_xyz_to_lab_function_lut().astype(np.float32)
 
@@ -151,7 +152,7 @@ class LABColorspace(AbstractColorspace):
                 self.D65_WHITE,
                 self.xyz_to_lab_lut,
             )
-        
+
         rgb_linear = self.rgb_to_xyz_lut[rgb_image]
         # Optimization: Use matmul instead of einsum
         rgb_flat = rgb_linear.reshape(-1, 3)
@@ -168,13 +169,15 @@ class LABColorspace(AbstractColorspace):
 
     def from_colorspace(self, color_image: np.ndarray) -> np.ndarray:
         L, a, b = color_image[..., 0], color_image[..., 1], color_image[..., 2]
-        
+
         if NUMBA_AVAILABLE and numba_utils:
             return numba_utils.lab_to_rgb_fast(
-                L, a, b,
+                L,
+                a,
+                b,
                 self.D65_WHITE,
                 self.XYZ_TO_RGB,
-                (color_image.shape[0], color_image.shape[1])
+                (color_image.shape[0], color_image.shape[1]),
             )
 
         fy = (L + 16.0) / 116.0
