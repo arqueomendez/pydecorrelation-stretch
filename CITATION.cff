@@ -2,7 +2,7 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: Decorrelation-Blender
+title: PyDecorrelation Stretch
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
@@ -15,9 +15,9 @@ authors:
 identifiers:
   - type: doi
     value: 10.5281/zenodo.17172812
-repository-code: 'https://github.com/arqueomendez/Decorrelation-Blender'
+repository-code: 'https://github.com/arqueomendez/pydecorrelation-stretch'
 abstract: >-
-  DStretch Python es una implementación avanzada y validada
+  PyDecorrelation Stretch es una implementación avanzada y validada
   del algoritmo decorrelation stretch para el realce de
   imágenes arqueológicas, especialmente arte rupestre, en
   Python. Replica matemáticamente el plugin DStretch de

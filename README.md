@@ -1,12 +1,12 @@
-# DStretch Python
+# PyDecorrelation Stretch
 
 [![DOI](https://zenodo.org/badge/1047210737.svg)](https://doi.org/10.5281/zenodo.17172811)
 
-**DStretch Python** es una implementación avanzada y validada del algoritmo decorrelation stretch para el realce de imágenes arqueológicas, especialmente arte rupestre, en Python. Replica matemáticamente el plugin DStretch de ImageJ (Jon Harman), con arquitectura moderna, interfaces CLI/GUI y 23 espacios de color validados.
+**PyDecorrelation Stretch** es una implementación avanzada y validada del algoritmo decorrelation stretch para el realce de imágenes arqueológicas, especialmente arte rupestre, en Python. Replica matemáticamente el plugin DStretch de ImageJ (Jon Harman), con arquitectura moderna, interfaces CLI/GUI y 23 espacios de color validados.
 
 ## Motivación
 
-DStretch Python permite revelar pigmentos y detalles invisibles en fotografías de arte rupestre y otros contextos arqueológicos. Utiliza análisis estadístico de color (PCA decorrelation stretch) y matrices predefinidas para separar y realzar colores de interés, facilitando la documentación, análisis y preservación digital.
+PyDecorrelation Stretch permite revelar pigmentos y detalles invisibles en fotografías de arte rupestre y otros contextos arqueológicos. Utiliza análisis estadístico de color (PCA decorrelation stretch) y matrices predefinidas para separar y realzar colores de interés, facilitando la documentación, análisis y preservación digital.
 
 ## Características
 
@@ -45,13 +45,13 @@ wget -qO- https://astral.sh/uv/install.sh | sh
 Descargar repositorio:
 
 ```bash
-git clone https://github.com/arqueomendez/dstretch-python.git
+git clone https://github.com/arqueomendez/pydecorrelation-stretch.git
 ```
 
 Instalar Decorrelation Stretch:
 Con UV:
 ```bash
-cd dstretch-python
+cd pydecorrelation-stretch
 uv sync
 ```
 
@@ -64,7 +64,7 @@ uv pip install -r requirements
 
 Para usuarios de **Windows** que prefieren no usar la línea de comandos ni instalar Python, ofrecemos un **ejecutable autot contenido (.exe)**.
 
-1.  Ve a la sección de **[Releases](https://github.com/arqueomendez/dstretch-python/releases)** del repositorio.
+1.  Ve a la sección de **[Releases](https://github.com/arqueomendez/pydecorrelation-stretch/releases)** del repositorio.
 2.  Descarga el archivo `DStretch-GUI-vX.Y.Z.exe` de la última versión.
 3.  Ejecuta el archivo directamente para iniciar la interfaz gráfica (GUI).
 
@@ -72,7 +72,7 @@ Este ejecutable contiene todo lo necesario para funcionar y ofrece la misma expe
 
 ## Tutorial en Video 📹
 
-Para una explicación completa y visual del proyecto DStretch Python, incluyendo instalación, uso y ejemplos prácticos, consulta este video tutorial en español:
+Para una explicación completa y visual del proyecto PyDecorrelation Stretch, incluyendo instalación, uso y ejemplos prácticos, consulta este video tutorial en español:
 
 [![DStretch Python - Tutorial Completo](https://img.youtube.com/vi/0bSW_uju6TI/0.jpg)](https://www.youtube.com/watch?v=0bSW_uju6TI)
 
@@ -163,7 +163,7 @@ cv2.imwrite("output.jpg", cv2.cvtColor(enhanced, cv2.COLOR_RGB2BGR))
 ## Estructura del Proyecto
 
 ```
-dstretch_python/
+pydecorrelation-stretch/
 ├── src/dstretch/           # Paquete principal
 │   ├── decorrelation.py    # Algoritmo principal
 │   ├── colorspaces.py      # Transformaciones de color
@@ -197,11 +197,11 @@ Ver el archivo LICENSE para detalles completos.
 
 ## Cita y Autores
 
-Si utilizas DStretch Python en trabajos académicos, por favor cita el software utilizando su DOI de Zenodo, que garantiza una referencia permanente y rastreable.
+Si utilizas PyDecorrelation Stretch en trabajos académicos, por favor cita el software utilizando su DOI de Zenodo, que garantiza una referencia permanente y rastreable.
 
 Formato de cita sugerido (APA 7 para software):
 
-> Méndez, V. (2025). *DStretch Python* (Version 0.5.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.17172811
+> Méndez, V. (2025). *PyDecorrelation Stretch* (Version 0.5.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.17172811
 
 ### Autores y Agradecimientos
 

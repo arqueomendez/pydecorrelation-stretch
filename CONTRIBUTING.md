@@ -1,6 +1,6 @@
-# Contributing to DStretch Python
+# Contributing to PyDecorrelation Stretch
 
-Thank you for your interest in contributing to DStretch Python! We welcome contributions from everyone. By participating in this project, you agree to abide by our code of conduct (if applicable).
+Thank you for your interest in contributing to PyDecorrelation Stretch! We welcome contributions from everyone. By participating in this project, you agree to abide by our code of conduct (if applicable).
 
 ## Getting Started
 
@@ -22,8 +22,8 @@ This project relies on several key libraries:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/arqueomendez/dstretch-python.git
-    cd dstretch-python
+    git clone https://github.com/arqueomendez/pydecorrelation-stretch.git
+    cd pydecorrelation-stretch
     ```
 
 2.  **Install dependencies using uv:**

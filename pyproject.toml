@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "dstretch-python"
+name = "pydecorrelation-stretch"
 version = "0.6.0"
 description = "Python implementation of DStretch decorrelation stretch for rock art analysis"
 authors = [{name = "Víctor Méndez", email = "victor.mendez@uc.cl"}]
@@ -40,8 +40,8 @@ dstretch = "dstretch.cli:main"
 dstretch-gui = "dstretch.gui:main"
 
 [project.urls]
-Homepage = "https://github.com/arqueomendez/dstretch-python"
-Repository = "https://github.com/arqueomendez/dstretch-python.git"
+Homepage = "https://github.com/arqueomendez/pydecorrelation-stretch"
+Repository = "https://github.com/arqueomendez/pydecorrelation-stretch.git"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/dstretch"]

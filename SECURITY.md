@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Only the latest major version of `dstretch-python` typically receives security updates. We strongly encourage users to always use the latest available version.
+Only the latest major version of `pydecorrelation-stretch` typically receives security updates. We strongly encourage users to always use the latest available version.
 
 | Version | Supported          | Notes                                  |
 | :-----: | :----------------: | :------------------------------------- |
@@ -12,7 +12,7 @@ Only the latest major version of `dstretch-python` typically receives security u
 
 ## Reporting a Vulnerability
 
-We value the security of our community and collaborators. If you believe you have found a security vulnerability in `dstretch-python`, please report it to us as outlined below.
+We value the security of our community and collaborators. If you believe you have found a security vulnerability in `pydecorrelation-stretch`, please report it to us as outlined below.
 
 **Do NOT report security vulnerabilities through public GitHub issues.**
 
@@ -22,7 +22,7 @@ We value the security of our community and collaborators. If you believe you hav
 2.  **Details Required**:
     *   A description of the vulnerability.
     *   Steps to reproduce the issue (proof of concept code or scripts are highly appreciated).
-    *   The version(s) of `dstretch-python` affected.
+    *   The version(s) of `pydecorrelation-stretch` affected.
     *   The potential impact of the vulnerability.
 
 ### Response Timeline
@@ -46,7 +46,7 @@ We value the security of our community and collaborators. If you believe you hav
 ## Security Best Practices for Users
 
 *   **Input Validation**: Always source images from trusted locations when running in automated batch modes.
-*   **Updates**: Keep `dstretch-python` and its dependencies updated (`uv sync` or `pip install --upgrade ...`).
+*   **Updates**: Keep `pydecorrelation-stretch` and its dependencies updated (`uv sync` or `pip install --upgrade ...`).
 *   **Environment**: Run the library in isolated environments (e.g., Virtual Environments, Containers) when processing untrusted data.
 
 ## Disclosure Policy
