@@ -1,3 +1,10 @@
+## v0.7.0 (2026-01-08)
+
+### Fix
+
+- **check-ruff-and-pyright**: check ruff and pyright
+- **refactor**: update all imports and references to pydecorrelation_stretch
+
 ## v0.6.0 (2026-01-07)
 
 ## v0.5.0 (2026-01-07)
