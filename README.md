@@ -88,12 +88,6 @@ Para asegurar que los comandos se ejecuten correctamente dentro del entorno virt
 La CLI es ideal para procesar imágenes de forma automática o integrar DStretch en flujos de trabajo existentes.
 
 ```bash
-# Procesamiento básico (espacio YDS por defecto)
-dstretch input.jpg
-# Especificar espacio de color e intensidad
-dstretch input.jpg --colorspace CRGB --scale 25
-# Guardar en archivo específico
-dstretch input.jpg --colorspace LRE --scale 30 --output enhanced.jpg
 # Procesamiento básico
 uv run dstretch input.jpg
 
@@ -113,7 +107,7 @@ uv run dstretch-gui
 
 ### Python API
 ```python
-from dstretch import DecorrelationStretch
+from pydecorrelation_stretch import DecorrelationStretch
 import cv2
 image = cv2.imread("input.jpg")
 image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -164,7 +158,7 @@ cv2.imwrite("output.jpg", cv2.cvtColor(enhanced, cv2.COLOR_RGB2BGR))
 
 ```
 pydecorrelation-stretch/
-├── src/dstretch/           # Paquete principal
+├── src/pydecorrelation_stretch/  # Paquete principal
 │   ├── decorrelation.py    # Algoritmo principal
 │   ├── colorspaces.py      # Transformaciones de color
 │   ├── cli.py              # Interfaz CLI
