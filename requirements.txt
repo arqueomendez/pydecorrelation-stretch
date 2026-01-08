@@ -444,9 +444,9 @@ imageio==2.35.1 ; python_full_version < '3.9' \
     --hash=sha256:4952dfeef3c3947957f6d5dedb1f4ca31c6e509a476891062396834048aeed2a \
     --hash=sha256:6eb2e5244e7a16b85c10b5c2fe0f7bf961b40fcb9f1a9fd1bd1d2c2f8fb3cd65
     # via scikit-image
-imageio==2.37.0 ; python_full_version >= '3.9' \
-    --hash=sha256:11efa15b87bc7871b61590326b2d635439acc321cf7f8ce996f812543ce10eed \
-    --hash=sha256:71b57b3669666272c818497aebba2b4c5f20d5b37c81720e5e1a56d59c492996
+imageio==2.37.2 ; python_full_version >= '3.9' \
+    --hash=sha256:0212ef2727ac9caa5ca4b2c75ae89454312f440a756fcfc8ef1993e718f50f8a \
+    --hash=sha256:ad9adfb20335d718c03de457358ed69f141021a333c40a53e57273d8a5bd0b9b
     # via scikit-image
 importlib-resources==6.4.5 ; python_full_version < '3.9' \
     --hash=sha256:980862a1d16c9e147a59603677fa2aa5fd82b87f223b6cb870695bcfce830065 \
