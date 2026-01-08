@@ -18,7 +18,9 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pydecorrelation_stretch.colorspaces import COLORSPACES  # Asumiendo que ahora está centralizado
+from pydecorrelation_stretch.colorspaces import (
+    COLORSPACES,  # Asumiendo que ahora está centralizado
+)
 
 # Asegúrate de que pydecorrelation_stretch y sus componentes estén accesibles
 # por ejemplo, instalados o en PYTHONPATH.

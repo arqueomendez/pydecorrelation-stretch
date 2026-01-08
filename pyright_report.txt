@@ -1,0 +1,29 @@
+g:\dstretch_python\src\pydecorrelation_stretch\gui.py
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:147:40 - error: Argument of type "float" cannot be assigned to parameter "from_" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:147:48 - error: Argument of type "float" cannot be assigned to parameter "to" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:153:40 - error: Argument of type "float" cannot be assigned to parameter "from_" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:153:48 - error: Argument of type "float" cannot be assigned to parameter "to" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:159:40 - error: Argument of type "float" cannot be assigned to parameter "from_" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:159:49 - error: Argument of type "float" cannot be assigned to parameter "to" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:162:40 - error: Argument of type "float" cannot be assigned to parameter "from_" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:162:48 - error: Argument of type "float" cannot be assigned to parameter "to" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:463:19 - error: Argument of type "float" cannot be assigned to parameter "from_" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:464:16 - error: Argument of type "float" cannot be assigned to parameter "to" of type "int" in function "__init__"
+    "float" is not assignable to "int" (reportArgumentType)
+  g:\dstretch_python\src\pydecorrelation_stretch\gui.py:639:9 - error: Method declaration "_reset_button_states" is obscured by a declaration of the same name (reportRedeclaration)
+g:\dstretch_python\src\pydecorrelation_stretch\io_utils.py
+  g:\dstretch_python\src\pydecorrelation_stretch\io_utils.py:14:69 - error: Expression of type "None" cannot be assigned to parameter of type "str"
+    "None" is not assignable to "str" (reportArgumentType)
+12 errors, 0 warnings, 0 informations
+WARNING: there is a new pyright version available (v1.1.407 -> v1.1.408).
+Please install the new version or set PYRIGHT_PYTHON_FORCE_VERSION to `latest`
+

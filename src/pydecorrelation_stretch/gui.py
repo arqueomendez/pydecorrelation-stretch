@@ -21,14 +21,13 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
 import customtkinter as ctk
+import cv2
+import numpy as np
+from PIL import Image, ImageTk
 
 # Configure CustomTkinter for premium look
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue") 
-
-import cv2
-import numpy as np
-from PIL import Image, ImageTk
 
 # Disable Pillow image limit
 Image.MAX_IMAGE_PIXELS = None
@@ -144,22 +143,26 @@ class AdvancedSettingsWindow(ctk.CTkToplevel):
         adv_frame.pack(fill=tk.X, pady=5)
 
         ctk.CTkLabel(adv_frame, text="Contrast Clip %:").pack(anchor=tk.W, padx=10, pady=(10, 0))
-        ctk.CTkSlider(adv_frame, from_=0.0, to=5.0, variable=self.vars["contrast_clip"]).pack(fill=tk.X, padx=10, pady=5)
+        ctk.CTkSlider(adv_frame, from_=0, to=5, variable=self.vars["contrast_clip"]).pack(fill=tk.X, padx=10, pady=5) # type: ignore
+
         
         ctk.CTkLabel(adv_frame, text="Balance Method:").pack(anchor=tk.W, padx=10)
         ctk.CTkOptionMenu(adv_frame, variable=self.vars["balance_method"], values=["gray_world", "white_patch", "manual"]).pack(fill=tk.X, padx=10, pady=5)
         
         ctk.CTkLabel(adv_frame, text="Balance Strength:").pack(anchor=tk.W, padx=10)
-        ctk.CTkSlider(adv_frame, from_=0.1, to=2.0, variable=self.vars["balance_strength"]).pack(fill=tk.X, padx=10, pady=5)
+        ctk.CTkSlider(adv_frame, from_=0.1, to=2, variable=self.vars["balance_strength"]).pack(fill=tk.X, padx=10, pady=5) # type: ignore
+
         
         ctk.CTkLabel(adv_frame, text="Flatten Method:").pack(anchor=tk.W, padx=10)
         ctk.CTkOptionMenu(adv_frame, variable=self.vars["flatten_method"], values=["gaussian", "rolling_ball"]).pack(fill=tk.X, padx=10, pady=5)
         
         ctk.CTkLabel(adv_frame, text="Large Structures (Blur):").pack(anchor=tk.W, padx=10)
-        ctk.CTkSlider(adv_frame, from_=10.0, to=200.0, variable=self.vars["flatten_large"]).pack(fill=tk.X, padx=10, pady=5)
+        ctk.CTkSlider(adv_frame, from_=10, to=200, variable=self.vars["flatten_large"]).pack(fill=tk.X, padx=10, pady=5) # type: ignore
+
         
         ctk.CTkLabel(adv_frame, text="Small Structures (Detail):").pack(anchor=tk.W, padx=10)
-        ctk.CTkSlider(adv_frame, from_=1.0, to=10.0, variable=self.vars["flatten_small"]).pack(fill=tk.X, padx=10, pady=(5, 15))
+        ctk.CTkSlider(adv_frame, from_=1, to=10, variable=self.vars["flatten_small"]).pack(fill=tk.X, padx=10, pady=(5, 15)) # type: ignore
+
 
         # Buttons
         button_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
@@ -224,7 +227,8 @@ class MemoryOptimizedImageCanvas(tk.Canvas):
         if isinstance(image_np, np.memmap) or image_np.size > 100_000_000: # >100MB
              # Subsample
              step = int(max(image_np.shape[0], image_np.shape[1]) / 2000)
-             if step < 1: step = 1
+             if step < 1:
+                 step = 1
              # Slice: image_np[::step, ::step]
              display_data = image_np[::step, ::step].copy()
         else:
@@ -431,7 +435,8 @@ class DStretchGUI:
             btn.grid(row=i//2, column=i%2, padx=2, pady=2, sticky="ew")
             self.preprocess_buttons[key] = btn
             
-        prep_frame.columnconfigure(0, weight=1); prep_frame.columnconfigure(1, weight=1)
+        prep_frame.columnconfigure(0, weight=1)
+        prep_frame.columnconfigure(1, weight=1)
         
         # Tools row
         tools_frame = ctk.CTkFrame(self.controls_frame, fg_color="transparent")
@@ -460,11 +465,12 @@ class DStretchGUI:
         
         self.scale_slider = ctk.CTkSlider(
             scale_frame,
-            from_=1.0,
-            to=100.0,
+            from_=1, # type: ignore
+            to=100, # type: ignore
             variable=self.scale_var,
             command=self._on_scale_changed
         )
+
         self.scale_slider.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
 
         # Footer
@@ -636,12 +642,8 @@ class DStretchGUI:
         self._set_status("Settings restored to defaults")
         gc.collect()
 
-    def _reset_button_states(self):
-        for btn in self.preprocess_buttons.values():
-            btn.configure(fg_color="transparent")
-        for btn in self.colorspace_buttons.values():
-            if btn.cget("text") != "CUSTOM":
-                 btn.configure(fg_color="transparent")
+    # Removed duplicate _reset_button_states (implement at end of class)
+
 
     def _show_about(self):
         messagebox.showinfo(
@@ -691,7 +693,8 @@ class DStretchGUI:
             if not isinstance(source, np.memmap):
                  source = self._optimize_image_for_processing(source)
             
-            if source is None: return
+            if source is None:
+                return
 
             self._set_status(f"Processing with {self.current_colorspace}...")
 

@@ -131,14 +131,20 @@ def rgb_to_lab_fast(rgb_image, rgb_to_xyz_lut, RGB_TO_XYZ, D65_WHITE, xyz_to_lab
             # Replicating logic: f_xyz_indices = (xyz_norm_clamped * (len - 1)).astype(int)
             
             # Clamp
-            if X_norm < 0.0: X_norm = 0.0
-            if X_norm > 1.0: X_norm = 1.0
+            if X_norm < 0.0:
+                X_norm = 0.0
+            if X_norm > 1.0:
+                X_norm = 1.0
             
-            if Y_norm < 0.0: Y_norm = 0.0
-            if Y_norm > 1.0: Y_norm = 1.0
+            if Y_norm < 0.0:
+                Y_norm = 0.0
+            if Y_norm > 1.0:
+                Y_norm = 1.0
             
-            if Z_norm < 0.0: Z_norm = 0.0
-            if Z_norm > 1.0: Z_norm = 1.0
+            if Z_norm < 0.0:
+                Z_norm = 0.0
+            if Z_norm > 1.0:
+                Z_norm = 1.0
             
             idx_x = int(X_norm * lab_lut_len)
             idx_y = int(Y_norm * lab_lut_len)

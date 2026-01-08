@@ -11,7 +11,7 @@ from PIL import Image
 logger = logging.getLogger(__name__)
 
 class ImageLoadingResult:
-    def __init__(self, data, is_memmap: bool, temp_file_path: str = None):
+    def __init__(self, data, is_memmap: bool, temp_file_path: str | None = None):
         self.data = data
         self.is_memmap = is_memmap
         self.temp_file_path = temp_file_path
@@ -29,7 +29,7 @@ class ImageLoadingResult:
                 if hasattr(self.data, '_mmap'):
                      self.data._mmap.close()
                 del self.data
-            except:
+            except Exception:
                 pass
                 
             if os.path.exists(self.temp_file_path):
@@ -152,6 +152,6 @@ def _load_to_memmap(file_path: Path, width: int, height: int) -> ImageLoadingRes
         if os.path.exists(temp_path):
             try:
                 os.remove(temp_path)
-            except:
+            except Exception:
                 pass
         raise e
