@@ -170,7 +170,7 @@ class AdvancedSettingsWindow(ctk.CTkToplevel):
 
         ctk.CTkLabel(adv_frame, text="Balance Strength:").pack(anchor=tk.W, padx=10)
         ctk.CTkSlider(
-            adv_frame, from_=0.1, to=2, variable=self.vars["balance_strength"]
+            adv_frame, from_=0.1, to=2, variable=self.vars["balance_strength"]  # type: ignore
         ).pack(fill=tk.X, padx=10, pady=5)  # type: ignore
 
         ctk.CTkLabel(adv_frame, text="Flatten Method:").pack(anchor=tk.W, padx=10)
