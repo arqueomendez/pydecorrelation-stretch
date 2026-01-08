@@ -1,3 +1,9 @@
+## v0.7.1 (2026-01-08)
+
+### Fix
+
+- **deps**: update dependencies and resolve pyright type errors
+
 ## v0.7.0 (2026-01-08)
 
 ### Fix

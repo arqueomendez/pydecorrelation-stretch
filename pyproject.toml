@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pydecorrelation-stretch"
-version = "0.7.0"
+version = "0.7.1"
 description = "Python implementation of DStretch decorrelation stretch for rock art analysis"
 authors = [{name = "Víctor Méndez", email = "victor.mendez@uc.cl"}]
 license = {text = "MIT"}
