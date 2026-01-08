@@ -15,8 +15,8 @@ import cv2
 import numpy as np
 import pytest
 
-from dstretch import ColorspaceManager, DecorrelationStretch
-from dstretch.decorrelation import process_image
+from pydecorrelation_stretch import ColorspaceManager, DecorrelationStretch
+from pydecorrelation_stretch.decorrelation import process_image
 
 
 class TestDecorrelationStretch:

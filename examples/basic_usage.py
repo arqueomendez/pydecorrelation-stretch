@@ -12,8 +12,8 @@ Asistido por: Claude Sonnet 4, Gemini 2.5 Pro, Copilot con GPT-4.1
 import numpy as np
 from PIL import Image
 
-from dstretch import DecorrelationStretch, get_available_colorspaces
-from dstretch.decorrelation import process_image
+from pydecorrelation_stretch import DecorrelationStretch, get_available_colorspaces
+from pydecorrelation_stretch.decorrelation import process_image
 
 
 def example_basic_processing():

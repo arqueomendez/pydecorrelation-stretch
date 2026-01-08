@@ -39,8 +39,8 @@ try:
     from .decorrelation import DecorrelationStretch
 except ImportError:
     try:
-        from dstretch import list_available_colorspaces
-        from dstretch.decorrelation import DecorrelationStretch
+        from pydecorrelation_stretch import list_available_colorspaces
+        from pydecorrelation_stretch.decorrelation import DecorrelationStretch
     except ImportError:
         # Fallback for standalone execution
         print(

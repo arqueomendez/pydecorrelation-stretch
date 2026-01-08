@@ -36,15 +36,15 @@ dev = [
 ]
 
 [project.scripts]
-dstretch = "dstretch.cli:main"
-dstretch-gui = "dstretch.gui:main"
+dstretch = "pydecorrelation_stretch.cli:main"
+dstretch-gui = "pydecorrelation_stretch.gui:main"
 
 [project.urls]
 Homepage = "https://github.com/arqueomendez/pydecorrelation-stretch"
 Repository = "https://github.com/arqueomendez/pydecorrelation-stretch.git"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/dstretch"]
+packages = ["src/pydecorrelation_stretch"]
 
 [tool.hatch.build.targets.sdist]
 include = [

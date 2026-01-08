@@ -39,14 +39,14 @@ def build() -> None:
     with open(launcher_path, "w") as f:
         f.write("import sys\n")
         f.write("from pathlib import Path\n")
-        f.write("from dstretch.gui import main\n")
+        f.write("from pydecorrelation_stretch.gui import main\n")
         f.write("if __name__ == '__main__':\n")
         f.write("    main()\n")
 
     print(f"Created launcher script at {launcher_path}")
 
     env = os.environ.copy()
-    # Add src to PYTHONPATH so Nuitka can find 'dstretch' package
+    # Add src to PYTHONPATH so Nuitka can find 'pydecorrelation_stretch' package
     existing_pythonpath = env.get("PYTHONPATH", "")
     env["PYTHONPATH"] = str(src_path) + os.pathsep + existing_pythonpath
 
@@ -61,8 +61,8 @@ def build() -> None:
         "--onefile",
         "--enable-plugin=tk-inter",
         "--enable-plugin=numpy",
-        "--include-package=dstretch",
-        "--include-package-data=dstretch",
+        "--include-package=pydecorrelation_stretch",
+        "--include-package-data=pydecorrelation_stretch",
         "--assume-yes-for-downloads",  # Important for CI
         "--output-dir=dist",
         f"--output-filename={output_filename}",

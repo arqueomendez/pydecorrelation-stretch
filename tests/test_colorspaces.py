@@ -1,6 +1,6 @@
 import numpy as np
 
-from dstretch.colorspaces import (
+from pydecorrelation_stretch.colorspaces import (
     ColorspaceManager,
     LABColorspace,
     RGBColorspace,

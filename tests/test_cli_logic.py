@@ -1,5 +1,5 @@
-from dstretch.cli import _convert_config_to_list
-from dstretch.independent_processors import create_preprocessing_config
+from pydecorrelation_stretch.cli import _convert_config_to_list
+from pydecorrelation_stretch.independent_processors import create_preprocessing_config
 
 
 class TestCLILogic:

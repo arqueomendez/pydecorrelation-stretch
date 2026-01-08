@@ -1,6 +1,6 @@
 import numpy as np
 
-from dstretch.independent_processors import (
+from pydecorrelation_stretch.independent_processors import (
     AutoContrastProcessor,
     ColorBalanceProcessor,
     FlattenProcessor,

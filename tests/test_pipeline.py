@@ -1,6 +1,6 @@
 import numpy as np
 
-from dstretch.pipeline import DStretchPipeline
+from pydecorrelation_stretch.pipeline import DStretchPipeline
 
 
 class TestDStretchPipeline:
