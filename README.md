@@ -89,19 +89,18 @@ La CLI es ideal para procesar imágenes de forma automática o integrar DStretch
 
 ```bash
 # Procesamiento básico
-uv run dstretch input.jpg
+uv run pydecorrelation-stretch input.jpg
 
 # Especificar espacio de color, intensidad y archivo de salida
-uv run dstretch input.jpg --colorspace CRGB --scale 25 --output enhanced.jpg
+uv run pydecorrelation-stretch input.jpg --colorspace CRGB --scale 25 --output enhanced.jpg
 
 # Listar espacios disponibles
-dstretch --list-colorspaces
-uv run dstretch --list-colorspaces
+uv run pydecorrelation-stretch --list-colorspaces
 ```
 
 ### GUI
 ```bash
-uv run dstretch-gui
+uv run pydecorrelation-stretch-gui
 # Interfaz gráfica similar a ImageJ DStretch
 ```
 

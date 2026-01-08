@@ -36,8 +36,8 @@ dev = [
 ]
 
 [project.scripts]
-dstretch = "pydecorrelation_stretch.cli:main"
-dstretch-gui = "pydecorrelation_stretch.gui:main"
+pydecorrelation-stretch = "pydecorrelation_stretch.cli:main"
+pydecorrelation-stretch-gui = "pydecorrelation_stretch.gui:main"
 
 [project.urls]
 Homepage = "https://github.com/arqueomendez/pydecorrelation-stretch"
