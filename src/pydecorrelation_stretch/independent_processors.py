@@ -25,7 +25,7 @@ import logging
 import warnings
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any
+from typing import Any, cast
 
 import cv2
 import numpy as np
@@ -193,13 +193,13 @@ class AutoContrastProcessor(BaseProcessor):
             stats["channels"][f"channel_{channel}"] = {
                 "original_range": (np.min(channel_data), np.max(channel_data)),
                 "enhanced_range": (np.min(enhanced_channel), np.max(enhanced_channel)),
-                "contrast_improvement": np.std(enhanced_channel)
-                / max(np.std(channel_data), 1e-6),
+                "contrast_improvement": np.std(cast(np.ndarray, enhanced_channel))
+                / max(np.std(cast(np.ndarray, channel_data)), 1e-6),
             }
 
         # Overall statistics
-        original_contrast = np.std(cv2.cvtColor(image, cv2.COLOR_RGB2GRAY))
-        enhanced_contrast = np.std(cv2.cvtColor(enhanced_image, cv2.COLOR_RGB2GRAY))
+        original_contrast = np.std(cast(np.ndarray, cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)))
+        enhanced_contrast = np.std(cast(np.ndarray, cv2.cvtColor(enhanced_image, cv2.COLOR_RGB2GRAY)))
 
         stats["overall"] = {
             "contrast_improvement": enhanced_contrast / max(original_contrast, 1e-6),
@@ -811,7 +811,7 @@ class FlattenProcessor(BaseProcessor):
     def _calculate_local_contrast(self, image: np.ndarray) -> float:
         """Calculate local contrast using Laplacian variance."""
         laplacian = cv2.Laplacian(image.astype(np.uint8), cv2.CV_64F)
-        return float(np.var(laplacian))
+        return float(np.var(cast(np.ndarray, laplacian)))
 
 
 class HueShiftProcessor(BaseProcessor):

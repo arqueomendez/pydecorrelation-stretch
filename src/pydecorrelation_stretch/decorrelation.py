@@ -607,8 +607,8 @@ class DecorrelationStretch:
         gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
         # Calculate illumination statistics
-        mean_brightness = np.mean(gray)
-        std_brightness = np.std(gray)
+        mean_brightness = np.mean(cast(np.ndarray, gray))
+        std_brightness = np.std(cast(np.ndarray, gray))
         min_brightness = np.min(gray)
         max_brightness = np.max(gray)
 

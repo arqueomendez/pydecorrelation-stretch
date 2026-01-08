@@ -14,6 +14,7 @@ Asistido por: Claude Sonnet 4, Gemini 2.5 Pro, Copilot con GPT-4.1
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import cast
 
 import cv2
 import numpy as np
@@ -134,7 +135,7 @@ class FlattenProcessor:
                 small_gaussian = channel_data.copy()
 
             # Bandpass result: original - large_blur + small_blur_mean
-            small_mean = np.mean(small_gaussian)
+            small_mean = np.mean(cast(np.ndarray, small_gaussian))
             bandpass_result = channel_data - large_gaussian + small_mean
 
             # Store background for analysis
@@ -588,7 +589,7 @@ def estimate_optimal_filter_size(image: np.ndarray) -> float:
     sqr_img = cv2.filter2D((gray.astype(np.float32)) ** 2, -1, kernel)
     variance_img = sqr_img - mean_img**2
 
-    avg_variance = np.mean(variance_img)
+    avg_variance = np.mean(cast(np.ndarray, variance_img))
 
     # Adjust filter size based on variance
     if avg_variance > 1000:  # High detail
